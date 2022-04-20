@@ -45,6 +45,139 @@ player3<- "Player 3"
 players <- c(player1, player2, player3)
 ```
 
-```{r}
+### Actions and Attributes for each Space
+This is what will go in the vector for each space:
+- name of space
+- is property (true/false)
+- price of property (could be NA)
+- color of space (could be NA)
+- pay or gain money (based on positive or negative number). Should I leave as 0 otherwise? Yes, let's do that
+- go to jail (true/false)
+- free parking (true/false)
+- land on go (true/false)
+- number of times it is landed on
 
+```{r board}
+mono_board = data.frame()
+
+# All of the spaces on the board
+go = c("Go", FALSE, NA, NA, 200, FALSE, FALSE, TRUE, 0)
+mediterranean = c("Mediterranean Avenue", TRUE, 60, "Purple", 0, FALSE, FALSE, FALSE, 0)
+community1 = c("Community Chest", FALSE, NA, NA, 0, FALSE, FALSE, FALSE, 0)
+baltic = c("Baltic Avenue", TRUE, 60, "Purple", 0, FALSE, FALSE, FALSE, 0)
+income = c("Income Tax", FALSE, NA, NA, -200, FALSE, FALSE, FALSE, 0)
+reading = c("Reading Railroad", TRUE, 200, "Railroad", 0, FALSE, FALSE, FALSE, 0)
+oriental = c("Oriental Avenue", TRUE, 100, "Light Blue", 0, FALSE, FALSE, FALSE, 0)
+chance1 = c("Chance", FALSE, NA, NA, 0, FALSE, FALSE, FALSE, 0)
+vermont = c("Vermont Avenue", TRUE, 100, "Light Blue", 0, FALSE, FALSE, FALSE, 0)
+connecticut = c("Connecticut Avenue", TRUE, 120, "Light Blue", 0, FALSE, FALSE, FALSE, 0)
+just_visiting_jail = c("Just Visiting", FALSE, NA, NA, 0, FALSE, FALSE, FALSE, 0) # Shares the same space as jail; need to incorporate that somehow. 
+charles = c("St. Charles Place", TRUE, 140, "Pink", 0, FALSE, FALSE, FALSE, 0)
+electric = c("Electric Company", TRUE, 150, "Utilities", 0, FALSE, FALSE, FALSE, 0)
+states = c("States Avenue", TRUE, 140, "Pink", 0, FALSE, FALSE, FALSE, 0)
+virginia = c("Virginia Avenue", TRUE, 160, "Pink", 0, FALSE, FALSE, FALSE, 0)
+penn_railroad = c("Pennsylvania Railroad", TRUE, 200, "Railroad", 0, FALSE, FALSE, FALSE, 0)
+james = c("St. James Place", TRUE, 180, "Orange", 0, FALSE, FALSE, FALSE, 0)
+community2 = c("Community Chest", FALSE, NA, NA, 0, FALSE, FALSE, FALSE, 0)
+tennessee = c("Tennessee Avenue", TRUE, 180, "Orange", 0, FALSE, FALSE, FALSE, 0)
+new_york = c("New York Avenue", TRUE, 200, "Orange", 0, FALSE, FALSE, FALSE, 0)
+parking = c("Free Parking", FALSE, NA, NA, 10000, FALSE, TRUE, FALSE, 0)
+kentucky = c("Kentucky Avenue", TRUE, 220, "Red", 0, FALSE, FALSE, FALSE, 0)
+chance2 = c("Chance", FALSE, NA, NA, 0, FALSE, FALSE, FALSE, 0)
+indiana = c("Indiana Avenue", TRUE, 220, "Red", 0, FALSE, FALSE, FALSE, 0)
+illinois = c("Illinois Avenue", TRUE, 240, "Red", 0, FALSE, FALSE, FALSE, 0)
+b_o = c("B&O Railroad", TRUE, 200, "Railroad", 0, FALSE, FALSE, FALSE, 0)
+atlantic = c("Atlantic Avenue", TRUE, 260, "Yellow", 0, FALSE, FALSE, FALSE, 0)
+ventnor = c("Ventnor Avenue", TRUE, 260, "Yellow", 0, FALSE, FALSE, FALSE, 0)
+water = c("Water Works", TRUE, 150, "Utilities", 0, FALSE, FALSE, FALSE, 0)
+marvin = c("Marvin Gardens", TRUE, 280, "Yellow", 0, FALSE, FALSE, FALSE, 0)
+jail = c("Go to Jail", FALSE, NA, NA, 0, TRUE, FALSE, FALSE, 0)
+pacific = c("Pacific Avenue", TRUE, 300, "Green", 0, FALSE, FALSE, FALSE, 0)
+carolina = c("North Carolina Avenue", TRUE, 300, "Green", 0, FALSE, FALSE, FALSE, 0)
+community3 = c("Community Chest", FALSE, NA, NA, 0, FALSE, FALSE, FALSE, 0)
+penn_avenue = c("Pennsylvania Avenue", TRUE, 320, "Green", 0, FALSE, FALSE, FALSE, 0)
+short = c("Short Line", TRUE, 200, "Railroad", 0, FALSE, FALSE, FALSE, 0)
+chance3 = c("Chance", FALSE, NA, NA, 0, FALSE, FALSE, FALSE, 0)
+park = c("Park Place", TRUE, 350, "Dark Blue", 0, FALSE, FALSE, FALSE, 0)
+luxury = c("Luxury Tax", FALSE, NA, NA, -75, FALSE, FALSE, FALSE, 0)
+boardwalk = c("Boardwalk", TRUE, 400, "Dark Blue", 0, FALSE, FALSE, FALSE, 0)
+
+mono_board = rbind(mono_board, go, mediterranean, community1, baltic, income, reading, oriental, chance1, vermont, connecticut, just_visiting_jail, charles, electric, states, virginia, penn_railroad, james, community2, tennessee, new_york, parking, kentucky, chance2, indiana, illinois, b_o, atlantic, ventnor, water, marvin, jail, pacific, carolina, community3, penn_avenue, short, chance3, park, luxury, boardwalk)
+
+colnames(mono_board) = c('Space name', 'Is property?', 'Price of property', 'Color of space', 'Pay or gain money', 'Go to jail?', 'Free parking?', 'Land on go?', 'Count')
+
+```
+
+### Community Chest Cards
+
+```{r community chest}
+cc_cards = data.frame()
+
+cc1 = c("Advance to Go(collect $200)")
+cc2 = c("Bank error in your favor. Collect $200")
+cc3 = c("Doctor's fee. Pay $50")
+cc4 = c("From sale of stock you get $50")
+cc5 = c("Get out of jail free")
+cc6 = c("Go to jail. Go directly to jail, do not pass Go, do not collect $200")
+cc7 = c("Holiday fund matures. Receive $100")
+cc8 = c("Income tax refund. Collect $20")
+cc9 = c("It is your birthday. Collect $10 from every player")
+cc10 = c("Life insurance matures. Collect $100")
+cc11 = c("Pay hospital fees of $100")
+cc12 = c("Pay school fees of $50")
+cc13 = c("Receive $25 consultancy fee")
+cc14 = c("You are assessed for street repair. $40 per house. $115 per hotel")
+cc15 = c("You have won second prize in a beauty contest. Collect $10")
+cc16 = c("You inherit $100")
+
+cc_cards = rbind(cc_cards, cc1, cc2, cc3, cc4, cc5, cc6, cc7, cc8, cc9, cc10, cc11, cc12, cc13, cc14, cc15, cc16)
+
+colnames(cc_cards) = c("Card Description")
+```
+
+### Chance cards
+
+```{r chance}
+chance_cards = data.frame()
+
+c1 = c("Advance to Boardwalk")
+c2 = c("Advance to Go(collect $200)")
+c3 = c("Advance to Illinois Avenue. If you pass Go, collect $200")
+c4 = c("Advance to St. Charles Place. If you pass Go, collect $200")
+c5 = c("Advance to the nearest Railroad. If unowned, you may buy it from the Bank. If owned, pay owner twice the rental to which they are otherwise entitled")
+c6 = c("Advance to the nearest Railroad. If unowned, you may buy it from the Bank. If owned, pay owner twice the rental to which they are otherwise entitled")
+c7 = c("Advance token to the nearest Utility. If unowned, you may buy it from the Bank. If owned, throw dice and pay owner a total ten times amount thrown.")
+c8 = c("Bank pays you dividend of $50")
+c9 = c("Get out of jail free")
+c10 = c("Go back 3 spaces")
+c11 = c("Go to jail. Go directly to jail, do not pass Go, do not collect $200")
+c12 = c("Make general repairs on all your property. For each house pay $25. For each hotel pay $100")
+c13 = c("Speeding fine $15")
+c14 = c("Take a trip to Reading Railroad. If you pass Go, collect $200")
+c15 = c("You have been elected Chairman of the Board. Pay each player $50")
+c16 = c("Your building loan matures. Collect $150")
+
+chance_cards = rbind(chance_cards, c1, c2, c3, c4, c5, c6, c7, c8, c9, c10, c11, c12, c13, c14, c15, c16)
+
+colnames(chance_cards) = c("Card Description")
+```
+## Structure for the Game
+
+### For the Basic Game (with no additional rules)
+
+1. All players start on Go (the first row in the mono_board dataframe)
+2. Each player takes their turn, one at a time. For their turn, they follow these steps. These steps will be in one function. 
+  - roll the dice
+  - the player will move their current space on the board by the number that the dice show. The player object needs to keep track of the space they are currently on. The player object should store this as an integer. In this step, they will update the current space. 
+  - increase the count of that space by 1
+  - current players turn is over. Next players turn.
+
+
+```{r turn}
+player_turn = function(player) {
+  # roll dice and store number in a variable
+  
+  # take the number from the dice and add that to the current space. Store the new space integer in the same variable
+  
+}
 ```
