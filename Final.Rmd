@@ -180,4 +180,35 @@ player_turn = function(player) {
   # take the number from the dice and add that to the current space. Store the new space integer in the same variable
   
 }
+
+### Player Objects
+
+library(dplyr)
+
+## players object
+
+players <- setRefClass("player",
+                       fields = list(pos="numeric",verbose='logical'),
+                       methods = list(
+                         move_x = function(x){Space <- if(x == move, current space plus roll, x)Space},
+                         go_to_space_x = function(x){Space <- if else(x == go to space, new space, x)Space},
+                         trap = function(x){Space <- if else(x == jail space, jail space, x)Space},
+                         getout = function(x){Space <- if else(x == get out of jail space, after jail space, x)Space},
+                         gotojail = function(x){Space <- if else(x == go to jail space, jail space, x)Space})
+                       )
+
+## test for how many times a player can land on a certain part of the board
+
+testing <- setRefClass("testing",
+                       fields = list(count = "numeric"),
+                       methods = list(increaseby = function(x){count[x] <<- count[x] + 1})
+                       )
+
+## main program
+
+## new players
+
+player1 <- players$new(pos = 1, verbose = FALSE)
+
+player2 <- players$new(pos = 1, verbose = FALSE)
 ```
