@@ -218,21 +218,34 @@ player2 <- players$new(pos = 1, verbose = FALSE)
 -bank_amount = subtracting amount you owe the bank (pay jail, parking ticket, chance card, etc.)
 -player_amount = subtracting when you land on another player's property
 -reward = adding amount of a reward (if a card says you won a reward etc.)
+
 ```{r Money}
 
 money_amount <-150
-Money<-function(x){
-  if(x==property_amount){
-    money_amount=money_amount-property_amount
+ 
+money_board<-function(mono_board){
+  if(mono_board[2]==TRUE){
+    money_amount = money_amount - mono_board[3]
     return(money_amount)
-  }else if(x==bank_amount){
-    money_amount=money_amount-bank_amount
+  }else{
     return(money_amount)
-  }else if(x==player_amount){
-    money_amount=money_amount-player_amount
+  }
+  if(mono_board[,5]== -200){
+    money_amount = money_amount - 200
     return(money_amount)
-  }else if(x==reward){
-    money_amount=money_amount+reward
+  }else if(mono_board[,5]== 10000){
+    money_amount = money_amount + 10000
+    return(money_amount)
+  }else if(mono_board[,5]==-75){
+    money_amount = money_amount - 75
+    return(money_amount)
+  }else if(mono_board[,5] == 0){
+    return(money_amount)
+  }
+  if(pos==Go){
+    money_amount = money_amount + 200
+    return(money_amount)
+  }else{
     return(money_amount)
   }
 }
