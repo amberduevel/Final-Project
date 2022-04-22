@@ -40,56 +40,90 @@ This is what will go in the vector for each space:
 - free parking (true/false)
 - land on go (true/false)
 - number of times it is landed on
+- x dimension on board
+- y dimension on board
 
 ```{r board}
 mono_board = data.frame()
-
 # All of the spaces on the board
-go = c("Go", FALSE, NA, NA, 200, FALSE, FALSE, TRUE, 0)
-mediterranean = c("Mediterranean Avenue", TRUE, 60, "Purple", 0, FALSE, FALSE, FALSE, 0)
-community1 = c("Community Chest", FALSE, NA, NA, 0, FALSE, FALSE, FALSE, 0)
-baltic = c("Baltic Avenue", TRUE, 60, "Purple", 0, FALSE, FALSE, FALSE, 0)
-income = c("Income Tax", FALSE, NA, NA, -200, FALSE, FALSE, FALSE, 0)
-reading = c("Reading Railroad", TRUE, 200, "Railroad", 0, FALSE, FALSE, FALSE, 0)
-oriental = c("Oriental Avenue", TRUE, 100, "Light Blue", 0, FALSE, FALSE, FALSE, 0)
-chance1 = c("Chance", FALSE, NA, NA, 0, FALSE, FALSE, FALSE, 0)
-vermont = c("Vermont Avenue", TRUE, 100, "Light Blue", 0, FALSE, FALSE, FALSE, 0)
-connecticut = c("Connecticut Avenue", TRUE, 120, "Light Blue", 0, FALSE, FALSE, FALSE, 0)
-just_visiting_jail = c("Just Visiting", FALSE, NA, NA, 0, FALSE, FALSE, FALSE, 0) # Shares the same space as jail; need to incorporate that somehow. 
-charles = c("St. Charles Place", TRUE, 140, "Pink", 0, FALSE, FALSE, FALSE, 0)
-electric = c("Electric Company", TRUE, 150, "Utilities", 0, FALSE, FALSE, FALSE, 0)
-states = c("States Avenue", TRUE, 140, "Pink", 0, FALSE, FALSE, FALSE, 0)
-virginia = c("Virginia Avenue", TRUE, 160, "Pink", 0, FALSE, FALSE, FALSE, 0)
-penn_railroad = c("Pennsylvania Railroad", TRUE, 200, "Railroad", 0, FALSE, FALSE, FALSE, 0)
-james = c("St. James Place", TRUE, 180, "Orange", 0, FALSE, FALSE, FALSE, 0)
-community2 = c("Community Chest", FALSE, NA, NA, 0, FALSE, FALSE, FALSE, 0)
-tennessee = c("Tennessee Avenue", TRUE, 180, "Orange", 0, FALSE, FALSE, FALSE, 0)
-new_york = c("New York Avenue", TRUE, 200, "Orange", 0, FALSE, FALSE, FALSE, 0)
-parking = c("Free Parking", FALSE, NA, NA, 10000, FALSE, TRUE, FALSE, 0)
-kentucky = c("Kentucky Avenue", TRUE, 220, "Red", 0, FALSE, FALSE, FALSE, 0)
-chance2 = c("Chance", FALSE, NA, NA, 0, FALSE, FALSE, FALSE, 0)
-indiana = c("Indiana Avenue", TRUE, 220, "Red", 0, FALSE, FALSE, FALSE, 0)
-illinois = c("Illinois Avenue", TRUE, 240, "Red", 0, FALSE, FALSE, FALSE, 0)
-b_o = c("B&O Railroad", TRUE, 200, "Railroad", 0, FALSE, FALSE, FALSE, 0)
-atlantic = c("Atlantic Avenue", TRUE, 260, "Yellow", 0, FALSE, FALSE, FALSE, 0)
-ventnor = c("Ventnor Avenue", TRUE, 260, "Yellow", 0, FALSE, FALSE, FALSE, 0)
-water = c("Water Works", TRUE, 150, "Utilities", 0, FALSE, FALSE, FALSE, 0)
-marvin = c("Marvin Gardens", TRUE, 280, "Yellow", 0, FALSE, FALSE, FALSE, 0)
-jail = c("Go to Jail", FALSE, NA, NA, 0, TRUE, FALSE, FALSE, 0)
-pacific = c("Pacific Avenue", TRUE, 300, "Green", 0, FALSE, FALSE, FALSE, 0)
-carolina = c("North Carolina Avenue", TRUE, 300, "Green", 0, FALSE, FALSE, FALSE, 0)
-community3 = c("Community Chest", FALSE, NA, NA, 0, FALSE, FALSE, FALSE, 0)
-penn_avenue = c("Pennsylvania Avenue", TRUE, 320, "Green", 0, FALSE, FALSE, FALSE, 0)
-short = c("Short Line", TRUE, 200, "Railroad", 0, FALSE, FALSE, FALSE, 0)
-chance3 = c("Chance", FALSE, NA, NA, 0, FALSE, FALSE, FALSE, 0)
-park = c("Park Place", TRUE, 350, "Dark Blue", 0, FALSE, FALSE, FALSE, 0)
-luxury = c("Luxury Tax", FALSE, NA, NA, -75, FALSE, FALSE, FALSE, 0)
-boardwalk = c("Boardwalk", TRUE, 400, "Dark Blue", 0, FALSE, FALSE, FALSE, 0)
+go = c("Go", FALSE, NA, NA, 200, FALSE, FALSE, TRUE, 0, 200, 0)
+mediterranean = c("Mediterranean Avenue", TRUE, 60, "Purple", 0, FALSE, FALSE, FALSE, 0, 172, 0)
+community1 = c("Community Chest", FALSE, NA, NA, 0, FALSE, FALSE, FALSE, 0, 155, 0)
+baltic = c("Baltic Avenue", TRUE, 60, "Purple", 0, FALSE, FALSE, FALSE, 0, 136, 0)
+income = c("Income Tax", FALSE, NA, NA, -200, FALSE, FALSE, FALSE, 0, 118, 0)
+reading = c("Reading Railroad", TRUE, 200, "Railroad", 0, FALSE, FALSE, FALSE, 0, 100, 0)
+oriental = c("Oriental Avenue", TRUE, 100, "Light Blue", 0, FALSE, FALSE, FALSE, 0, 82, 0)
+chance1 = c("Chance", FALSE, NA, NA, 0, FALSE, FALSE, FALSE, 0, 64, 0)
+vermont = c("Vermont Avenue", TRUE, 100, "Light Blue", 0, FALSE, FALSE, FALSE, 0, 46, 0)
+connecticut = c("Connecticut Avenue", TRUE, 120, "Light Blue", 0, FALSE, FALSE, FALSE, 0, 28, 0)
+just_visiting_jail = c("Just Visiting", FALSE, NA, NA, 0, FALSE, FALSE, FALSE, 0, 0, 0) # Shares the same space as jail; need to incorporate that somehow. 
+charles = c("St. Charles Place", TRUE, 140, "Pink", 0, FALSE, FALSE, FALSE, 0, 0, 28)
+electric = c("Electric Company", TRUE, 150, "Utilities", 0, FALSE, FALSE, FALSE, 0, 0, 46)
+states = c("States Avenue", TRUE, 140, "Pink", 0, FALSE, FALSE, FALSE, 0, 0, 64)
+virginia = c("Virginia Avenue", TRUE, 160, "Pink", 0, FALSE, FALSE, FALSE, 0, 0, 82)
+penn_railroad = c("Pennsylvania Railroad", TRUE, 200, "Railroad", 0, FALSE, FALSE, FALSE, 0, 0, 100)
+james = c("St. James Place", TRUE, 180, "Orange", 0, FALSE, FALSE, FALSE, 0, 0, 118)
+community2 = c("Community Chest", FALSE, NA, NA, 0, FALSE, FALSE, FALSE, 0, 0, 136)
+tennessee = c("Tennessee Avenue", TRUE, 180, "Orange", 0, FALSE, FALSE, FALSE, 0, 0, 154)
+new_york = c("New York Avenue", TRUE, 200, "Orange", 0, FALSE, FALSE, FALSE, 0, 0, 172)
+parking = c("Free Parking", FALSE, NA, NA, 10000, FALSE, TRUE, FALSE, 0, 0, 200)
+kentucky = c("Kentucky Avenue", TRUE, 220, "Red", 0, FALSE, FALSE, FALSE, 0, 28, 200)
+chance2 = c("Chance", FALSE, NA, NA, 0, FALSE, FALSE, FALSE, 0, 46, 200)
+indiana = c("Indiana Avenue", TRUE, 220, "Red", 0, FALSE, FALSE, FALSE, 0, 64, 200)
+illinois = c("Illinois Avenue", TRUE, 240, "Red", 0, FALSE, FALSE, FALSE, 0, 82, 200)
+b_o = c("B&O Railroad", TRUE, 200, "Railroad", 0, FALSE, FALSE, FALSE, 0, 100, 200)
+atlantic = c("Atlantic Avenue", TRUE, 260, "Yellow", 0, FALSE, FALSE, FALSE, 0, 118, 200)
+ventnor = c("Ventnor Avenue", TRUE, 260, "Yellow", 0, FALSE, FALSE, FALSE, 0, 136, 200)
+water = c("Water Works", TRUE, 150, "Utilities", 0, FALSE, FALSE, FALSE, 0, 155, 200)
+marvin = c("Marvin Gardens", TRUE, 280, "Yellow", 0, FALSE, FALSE, FALSE, 0, 172, 200)
+jail = c("Go to Jail", FALSE, NA, NA, 0, TRUE, FALSE, FALSE, 0, 200, 200)
+pacific = c("Pacific Avenue", TRUE, 300, "Green", 0, FALSE, FALSE, FALSE, 0, 200, 172)
+carolina = c("North Carolina Avenue", TRUE, 300, "Green", 0, FALSE, FALSE, FALSE, 0, 200, 154)
+community3 = c("Community Chest", FALSE, NA, NA, 0, FALSE, FALSE, FALSE, 0, 200, 136)
+penn_avenue = c("Pennsylvania Avenue", TRUE, 320, "Green", 0, FALSE, FALSE, FALSE, 0, 200, 118)
+short = c("Short Line", TRUE, 200, "Railroad", 0, FALSE, FALSE, FALSE, 0, 200, 100)
+chance3 = c("Chance", FALSE, NA, NA, 0, FALSE, FALSE, FALSE, 0, 200, 82)
+park = c("Park Place", TRUE, 350, "Dark Blue", 0, FALSE, FALSE, FALSE, 0, 200, 64)
+luxury = c("Luxury Tax", FALSE, NA, NA, -75, FALSE, FALSE, FALSE, 0, 200, 46)
+boardwalk = c("Boardwalk", TRUE, 400, "Dark Blue", 0, FALSE, FALSE, FALSE, 0, 200, 28)
 
 mono_board = rbind(mono_board, go, mediterranean, community1, baltic, income, reading, oriental, chance1, vermont, connecticut, just_visiting_jail, charles, electric, states, virginia, penn_railroad, james, community2, tennessee, new_york, parking, kentucky, chance2, indiana, illinois, b_o, atlantic, ventnor, water, marvin, jail, pacific, carolina, community3, penn_avenue, short, chance3, park, luxury, boardwalk)
 
 colnames(mono_board) = c('Space name', 'Is property?', 'Price of property', 'Color of space', 'Pay or gain money', 'Go to jail?', 'Free parking?', 'Land on go?', 'Count')
 
+```
+
+### Monopoly Board Image
+
+```{r image}
+library(grid)
+library(jpeg)
+library(tidyverse)
+library(ggplot2)
+library(gganimate)
+Sys.setenv("VROOM_CONNECTION_SIZE" = 131072 * 2)
+
+board_img = rasterGrob(readJPEG("monopolyboard.jpg"), 
+                       width = unit(1, "npc"), height = unit(1, "npc"))
+```
+
+
+```{r plot}
+mono_graph = ggplot(mono_board, aes(x = X_Dimension, y = Y_Dimension)) +
+  annotation_custom(board_img) +
+  theme(aspect.ratio = 1) +
+  scale_x_discrete(limits = c(0, 200)) +
+  scale_y_discrete(limits = c(0, 200)) +
+  geom_point(size = 5)
+mono_graph
+
+mono_graph2 = ggplot(mono_board) +
+  annotation_custom(board_img) +
+  theme(aspect.ratio = 1) +
+  xlim(0, 200) +
+  ylim(0, 200) +
+  geom_point(x = 200, y = 200)
+mono_graph2
 ```
 
 ### Community Chest Cards
