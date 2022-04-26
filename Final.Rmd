@@ -256,7 +256,7 @@ player2 <- players$new(pos = 1, verbose = FALSE)
 
 ```{r Money}
 
-money_amount <-150
+money_amount <-1500
  
 money_board<-function(mono_board){
   if(mono_board[,2]==TRUE){
