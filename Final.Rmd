@@ -279,4 +279,54 @@ money_board<-function(mono_board){
   }
 }
 
+money_chance <-function(chance_cards){
+  if(chance_cards[,2]==0){
+    return(money_amount)
+  }else if(chance_cards[,2]==200){
+    money_amount = money_amount + 200
+    return(money_amount)
+  }else if(chance_cards[,2]==50){
+    money_amount = money_amount + 50
+    return(money_amount)
+  }else if(money_amount[,2]==-15){
+    money_amount = money_amount - 15
+    return(money_amount)
+  }else if(money_amount[,2]==-50){
+    money_amount = money_amount - 50
+    return(money_amount)
+  }else if(money_amount[,2]==150){
+    money_amount = money_amount + 150
+    return(money_amount)
+  }
+}
+
+money_cc <- function(cc_cards){
+  if(cc_cards[,2]==0){
+    return(money_amount)
+  }else if(cc_cards[,2]==200){
+    money_amount = money_amount + 200
+    return(money_amount)
+  }else if(cc_cards[,2]==-50){
+    money_amount = money_amount - 50
+    return(money_amount)
+  }else if(cc_cards[,2]==50){
+    money_amount = money_amount + 50
+    return(money_amount)
+  }else if(cc_cards[,2]==100){
+    money_amount = money_amount + 100
+    return(money_amount)
+  }else if(cc_cards[,2]==20){
+    money_amount = money_amount + 20
+    return(money_amount)
+  }else if(cc_cards[,2]==-100){
+    money_amount = money_amount - 100
+    return(money_amount)
+  }else if(cc_cards[,2]==-25){
+    money_amount = money_amount - 25
+    return(money_amount)
+  }else if(cc_cards[,2]==10){
+    money_amount = money_amount + 10
+    return(money_amount)
+  }
+}
 ```
