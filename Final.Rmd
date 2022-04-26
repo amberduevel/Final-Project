@@ -218,6 +218,31 @@ player_turn = function(player) {
 
 ### Player Objects
 
+player_df = data.frame()
+player1 = c("player1", 1, 1500)
+player2 = c("player2", 1, 1500)
+player_df = rbind(player_df, player1, player2)
+colnames(player_df) = c("Name", "Position", "Money")
+
+count = 0
+
+while (count < 10) {
+  player_turn()
+  count = count + 1
+}
+
+player = 1
+
+player_turn = function(player) {
+  move()
+  player = player + 1
+}
+
+move = function() {
+  roll = dice_simple()
+  player_df[player, 2] = player_df[player, 2] + roll
+}
+
 library(dplyr)
 
 ## players object
