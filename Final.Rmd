@@ -4,6 +4,12 @@ author: "Amber Duevel"
 date: "4/19/2022"
 output: html_document
 ---
+Rule:
+1. Each player starts out with $1,500
+2. Each player rolls the dice, the highest roller starts first
+3. If you roll doubles three times, move your player to the jail space
+4. A player can get out of jail if they roll doubles, use "Get out of jail free card", or pay a fine of $50
+5. Everytime a player passes GO they receive $200
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
