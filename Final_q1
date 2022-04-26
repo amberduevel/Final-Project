@@ -1,1 +1,6 @@
-
+```{r dice}
+dice_simple<- function(verbose= FALSE){
+  face<- sample(1:6, 2, replace=TRUE)
+  movement=sum(face)
+}
+```{r}
