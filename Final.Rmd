@@ -221,27 +221,34 @@ player_turn = function(player) {
 player_df = data.frame()
 player1 = c("player1", 1, 1500)
 player2 = c("player2", 1, 1500)
+player3 = c("player3", 1, 1500)
+player4 = c("player4", 1, 1500)
 player_df = rbind(player_df, player1, player2)
-colnames(player_df) = c("Name", "Position", "Money")
+colnames(player_df) = c("name", "position", "money")
+player_df = transform(player_df, position = as.numeric(position))
+num_players = nrow(player_df)
 
-count = 0
-
-while (count < 10) {
-  player_turn()
-  count = count + 1
-}
-
-player = 1
-
-player_turn = function(player) {
-  move()
-  player = player + 1
-}
+rounds = 0
+player = 0
 
 move = function() {
   roll = dice_simple()
-  player_df[player, 2] = player_df[player, 2] + roll
+  player_df[player+1, 2] = player_df[player+1, 2] + roll
+  space = player_df[player+1, 2]
+  #mono_board[space, "count"] = mono_board[space, "count"] + 1
 }
+
+player_turn = function(player) {
+  move()
+  player = (player + 1)%%4
+}
+
+while (rounds < 10) {
+  player_turn(player)
+  player = (player+1)%%4
+  rounds = rounds + 1
+}
+
 
 library(dplyr)
 
