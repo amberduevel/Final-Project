@@ -259,7 +259,7 @@ players <- setRefClass("player",
                        methods = list(
                          move_x = function(x) {
                              if(verbose) cat("Player at:", pos)
-                             if(verbose) cat(" Player moves:", n)
+                             if(verbose) cat(" Player moves:", x)
                              pos <<- pos + x
                              if(pos > 40) pos <<- pos - 40
                              if(verbose) cat(" Player now at:", pos,"\n")
