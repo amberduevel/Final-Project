@@ -207,23 +207,13 @@ colnames(chance_cards) = c("Card Description")
   - increase the count of that space by 1
   - current players turn is over. Next players turn.
 
-
 ```{r turn}
-player_turn = function(player) {
-  # roll dice and store number in a variable
-  
-  # take the number from the dice and add that to the current space. Store the new space integer in the same variable
-  
-}
-
-### Player Objects
-
 player_df = data.frame()
 player1 = c("player1", 1, 1500)
 player2 = c("player2", 1, 1500)
 player3 = c("player3", 1, 1500)
 player4 = c("player4", 1, 1500)
-player_df = rbind(player_df, player1, player2)
+player_df = rbind(player_df, player1, player2, player3, player4)
 colnames(player_df) = c("name", "position", "money")
 player_df = transform(player_df, position = as.numeric(position))
 num_players = nrow(player_df)
@@ -233,14 +223,24 @@ player = 0
 
 move = function() {
   roll = dice_simple()
-  player_df[player+1, 2] = player_df[player+1, 2] + roll
-  space = player_df[player+1, 2]
-  #mono_board[space, "count"] = mono_board[space, "count"] + 1
+  space = player_df[player+1, 2] + roll
+  return(space)
 }
 
 player_turn = function(player) {
-  move()
-  player = (player + 1)%%4
+  s = move()
+  mono_board[s, 9] = as.numeric(mono_board[s, 9] + 1)
+  player_df[player+1, 2] = s
+  player = (player + 1)%%num_players
+  
+  #Stuff to test it. Doesn't quite work but it's better
+  # print(player)
+  # print(s)
+  # print(player_df[player+1, 2])
+  # print("")
+  
+  return(assign("player_df", player_df, .GlobalEnv))
+  return(assign("mono_board", mono_board, .GlobalEnv))
 }
 
 while (rounds < 10) {
@@ -249,7 +249,9 @@ while (rounds < 10) {
   rounds = rounds + 1
 }
 
+```
 
+```{r}
 library(dplyr)
 
 ## players object
