@@ -268,7 +268,8 @@ players <- setRefClass("player",
                              if(verbose) cat("Player at:", pos,".")
                              pos <<- x
                              if(verbose) cat(" Player now at:", pos,".\n")
-                         }
+                         },
+                         money_amount
                        ##  trap = function(x) {Space <- if else(x == jail space, jail space, x)Space},
                        ##  getout = function(x) {Space <- if else(x == get out of jail space, after jail space, x)Space},
                        ##  gotojail = function(x) {Space <- if else(x == go to jail space, jail space, x)Space})
@@ -278,7 +279,11 @@ players <- setRefClass("player",
 
 testing <- setRefClass("testing",
                        fields = list(count = "numeric"),
-                       methods = list(increaseby = function(x){count[x] <<- count[x] + 1})
+                       methods = list(
+                         increaseby = function(x) {
+                              count[x] <<- count[x] + 1
+                         }
+                        )
                        )
 
 ## main program
