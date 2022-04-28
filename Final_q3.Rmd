@@ -8,3 +8,35 @@ output: html_document
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
+```{r dice}
+dice <- function(){
+  face = sample(1:6, 2, replace=TRUE)
+    if(face[1]==face[2]){
+      move = sum(face)
+      face()
+      move = sum(face)
+      if(face[1]==face[2]){
+        move = sum(face)
+        face()
+        move = sum(face)
+      }else{
+        move = sum(face)
+      }
+        if(face[1]==face[2]){
+        pos = jail
+        }else{
+          move = sum(face)
+        }
+    }else{
+      move = sum(face)
+    }
+  if(pos = jail){
+    face()
+    if(face[1]==face[2]){
+      move = sum(face)
+    }else{
+      break
+    }
+  }
+}
+```
