@@ -52,3 +52,113 @@ dice <- function(){
   }
 }
 ```
+```{r board}
+mono_board = data.frame()
+# All of the spaces on the board
+go = c("Go", 0, 200, 0)
+mediterranean = c("Mediterranean Avenue", 0, 172, 0)
+community1 = c("Community Chest", 0, 155, 0)
+baltic = c("Baltic Avenue", 0, 136, 0)
+income = c("Income Tax", 0, 118, 0)
+reading = c("Reading Railroad", 0, 100, 0)
+oriental = c("Oriental Avenue", 0, 82, 0)
+chance1 = c("Chance", 0, 64, 0)
+vermont = c("Vermont Avenue", 0, 46, 0)
+connecticut = c("Connecticut Avenue", 0, 28, 0)
+just_visiting_jail = c("Just Visiting/Jail", 0, 0, 0)
+charles = c("St. Charles Place", 0, 0, 28)
+electric = c("Electric Company", 0, 0, 46)
+states = c("States Avenue", 0, 0, 64)
+virginia = c("Virginia Avenue", 0, 0, 82)
+penn_railroad = c("Pennsylvania Railroad", 0, 0, 100)
+james = c("St. James Place", 0, 0, 118)
+community2 = c("Community Chest", 0, 0, 136)
+tennessee = c("Tennessee Avenue", 0, 0, 154)
+new_york = c("New York Avenue", 0, 0, 172)
+parking = c("Free Parking", 0, 0, 200)
+kentucky = c("Kentucky Avenue", 0, 28, 200)
+chance2 = c("Chance", 0, 46, 200)
+indiana = c("Indiana Avenue", 0, 64, 200)
+illinois = c("Illinois Avenue", 0, 82, 200)
+b_o = c("B&O Railroad", 0, 100, 200)
+atlantic = c("Atlantic Avenue", 0, 118, 200)
+ventnor = c("Ventnor Avenue", 0, 136, 200)
+water = c("Water Works", 0, 155, 200)
+marvin = c("Marvin Gardens", 0, 172, 200)
+jail = c("Go to Jail", 0, 200, 200)
+pacific = c("Pacific Avenue", 0, 200, 172)
+carolina = c("North Carolina Avenue", 0, 200, 154)
+community3 = c("Community Chest", 0, 200, 136)
+penn_avenue = c("Pennsylvania Avenue", 0, 200, 118)
+short = c("Short Line", 0, 200, 100)
+chance3 = c("Chance", 0, 200, 82)
+park = c("Park Place", 0, 200, 64)
+luxury = c("Luxury Tax", 0, 200, 46)
+boardwalk = c("Boardwalk", 0, 200, 28)
+mono_board = rbind(mono_board, go, mediterranean, community1, baltic, income, reading, oriental, chance1, vermont, connecticut, just_visiting_jail, charles, electric, states, virginia, penn_railroad, james, community2, tennessee, new_york, parking, kentucky, chance2, indiana, illinois, b_o, atlantic, ventnor, water, marvin, jail, pacific, carolina, community3, penn_avenue, short, chance3, park, luxury, boardwalk)
+colnames(mono_board) = c('space_name', 'count', 'x_dimension', 'y_dimension')
+```
+
+```{r}
+mono_board = transform(mono_board, x_dimension = as.numeric(x_dimension))
+mono_board = transform(mono_board, y_dimension = as.numeric(y_dimension))
+mono_board = transform(mono_board, count = as.numeric(count))
+```
+
+```{r image}
+library(grid)
+library(jpeg)
+library(tidyverse)
+library(ggplot2)
+library(gganimate)
+Sys.setenv("VROOM_CONNECTION_SIZE" = 131072 * 2)
+board_img = rasterGrob(readJPEG("monopolyboard.jpg"), 
+                       width = unit(1, "npc"), height = unit(1, "npc"))
+```
+
+```{r plot}
+mono_graph = ggplot(mono_board) +
+  annotation_custom(board_img) +
+  theme(aspect.ratio = 1) +
+  xlim(0, 200) +
+  ylim(0, 200) +
+  geom_point(aes(x = x_dimension, y = y_dimension))
+mono_graph
+```
+
+```{r turn}
+player_df = data.frame()
+player1 = c("player1", 1, 1500)
+player2 = c("player2", 1, 1500)
+player3 = c("player3", 1, 1500)
+player4 = c("player4", 1, 1500)
+player_df = rbind(player_df, player1, player2, player3, player4)
+colnames(player_df) = c("name", "position", "money")
+player_df = transform(player_df, position = as.numeric(position))
+num_players = nrow(player_df)
+rounds = 0
+player = 0
+move = function() {
+  roll = dice()
+  space = player_df[player+1, 2] + roll
+  if (space == 40) {
+    space = 40
+  }
+  else {
+    space = space%%40
+  }
+  return(space)
+}
+player_turn = function(player) {
+  s = move()
+  mono_board[s, 2] = as.numeric(mono_board[s, 2] + 1)
+  player_df[player+1, 2] = s
+  
+  return(c(assign("mono_board", mono_board, .GlobalEnv), assign("player_df", player_df, .GlobalEnv)))
+}
+while (rounds < 48) {
+  player_turn(player)
+  player = (player+1)%%4
+  rounds = rounds + 1
+}
+```
