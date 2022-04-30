@@ -8,3 +8,57 @@ output: html_document
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
+library(dplyr)
+
+cc_cards = data.frame()
+cc1 = c("Advance to Go(collect $200)", 200, TRUE, "Go")
+cc2 = c("Bank error in your favor. Collect $200", 200, FALSE, NA)
+cc3 = c("Doctor's fee. Pay $50", -50, FALSE, NA)
+cc4 = c("From sale of stock you get $50", 50, FALSE, NA)
+cc5 = c("Get out of jail free", 0, FALSE, NA)
+cc6 = c("Go to jail. Go directly to jail, do not pass Go, do not collect $200", 0, TRUE, "Just Visiting")
+cc7 = c("Holiday fund matures. Receive $100", 100, FALSE, NA)
+cc8 = c("Income tax refund. Collect $20", 20, FALSE, NA)
+cc9 = c("It is your birthday. Collect $10 from every player", 0, FALSE, NA)
+cc10 = c("Life insurance matures. Collect $100", 100, FALSE, NA)
+cc11 = c("Pay hospital fees of $100", -100, FALSE, NA)
+cc12 = c("Pay school fees of $50", -50, FALSE, NA)
+cc13 = c("Receive $25 consultancy fee", -25, FALSE, NA)
+cc14 = c("You are assessed for street repair. $40 per house. $115 per hotel", 0, FALSE, NA)
+cc15 = c("You have won second prize in a beauty contest. Collect $10", 10, FALSE, NA)
+cc16 = c("You inherit $100", 100, FALSE, NA)
+cc_cards <- rbind(cc_cards, cc1, cc2, cc3, cc4, cc5, cc6, cc7, cc8, cc9, cc10, cc11, cc12, cc13, cc14, cc15, cc16)
+colnames(cc_cards) = c("Card Description")
+
+cc_cards_vec <- c("Advance to Go(collect $200)", "Bank error in your favor. Collect $200", "Doctor's fee. Pay $50", "From sale of stock you get $50", "Get out of jail free", "Go to jail. Go directly to jail, do not pass Go, do not collect $200", "Holiday fund matures. Receive $100", "Income tax refund. Collect $20", "It is your birthday. Collect $10 from every player", "Life insurance matures. Collect $100", "Pay hospital fees of $100", "Pay school fees of $50", "Receive $25 consultancy fee", "You are assessed for street repair. $40 per house. $115 per hotel", "You have won second prize in a beauty contest. Collect $10", "You inherit $100")
+
+r <- sample(cc_cards_vec, size = 1, replace = FALSE)
+r
+
+
+
+
+chance_cards = data.frame()
+c1 = c("Advance to Boardwalk", 0, TRUE, "Boardwalk")
+c2 = c("Advance to Go(collect $200)", 200, TRUE, "Go")
+c3 = c("Advance to Illinois Avenue. If you pass Go, collect $200", 0, TRUE, "Illinois Avenue")
+c4 = c("Advance to St. Charles Place. If you pass Go, collect $200", 0, TRUE, "St. Charles Place")
+c5 = c("Advance to the nearest Railroad. If unowned, you may buy it from the Bank. If owned, pay owner twice the rental to which they are otherwise entitled", 0, TRUE, "Railroad") #Needs to look for the nearest railroad, which it's not doing right now
+c6 = c("Advance to the nearest Railroad. If unowned, you may buy it from the Bank. If owned, pay owner twice the rental to which they are otherwise entitled", 0, TRUE, "Railroad") #Same as the previous one
+c7 = c("Advance token to the nearest Utility. If unowned, you may buy it from the Bank. If owned, throw dice and pay owner a total ten times amount thrown.", 0, TRUE, "Utility") #Same as the previous one but with utilities
+c8 = c("Bank pays you dividend of $50", 50, FALSE, NA)
+c9 = c("Get out of jail free", 0, FALSE, NA)
+c10 = c("Go back 3 spaces", 0, TRUE, "Current space minus 3")
+c11 = c("Go to jail. Go directly to jail, do not pass Go, do not collect $200", 0, TRUE, "Just Visiting")
+c12 = c("Make general repairs on all your property. For each house pay $25. For each hotel pay $100", 0, FALSE, NA)
+c13 = c("Speeding fine $15", -15, FALSE, NA)
+c14 = c("Take a trip to Reading Railroad. If you pass Go, collect $200", 0, TRUE, "Go")
+c15 = c("You have been elected Chairman of the Board. Pay each player $50", -50, FALSE, NA)
+c16 = c("Your building loan matures. Collect $150", 150, FALSE, NA)
+chance_cards = rbind(chance_cards, c1, c2, c3, c4, c5, c6, c7, c8, c9, c10, c11, c12, c13, c14, c15, c16)
+colnames(chance_cards) = c("Card Description")
+
+chance_cards_vec <- c("Advance to Boardwalk", "Advance to Go(collect $200)", "Advance to Illinois Avenue. If you pass Go, collect $200", "Advance to St. Charles Place. If you pass Go, collect $200", "Advance to the nearest Railroad. If unowned, you may buy it from the Bank. If owned, pay owner twice the rental to which they are otherwise entitled", "Advance to the nearest Railroad. If unowned, you may buy it from the Bank. If owned, pay owner twice the rental to which they are otherwise entitled", "Advance token to the nearest Utility. If unowned, you may buy it from the Bank. If owned, throw dice and pay owner a total ten times amount thrown.", "Bank pays you dividend of $50", "Get out of jail free", "Go back 3 spaces", "Go to jail. Go directly to jail, do not pass Go, do not collect $200", "Make general repairs on all your property. For each house pay $25. For each hotel pay $100", "Speeding fine $15", "Take a trip to Reading Railroad. If you pass Go, collect $200", "You have been elected Chairman of the Board. Pay each player $50", "Your building loan matures. Collect $150")
+
+r1 <- sample(chance_cards_vec, size = 1, replace = FALSE)
+r1
