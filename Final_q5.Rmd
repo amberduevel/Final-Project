@@ -8,3 +8,46 @@ output: html_document
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
+```{r dice}
+check_double<-function(){
+  if(face[1]==face[2]){
+    movement=sum(face)
+    dice()
+    double_count=double_count+1
+      if(double_count==3){
+        player_df[player+1, 2] = 11
+        return(assign("player_df",player_df,.GlobalEnv))
+      }
+    return(double_count)
+  }else{
+    movement=sum(face)
+  }
+}
+
+jail_out<-function(){
+  if(face[1]==face[2]){
+    movement=sum(face)
+  }else{
+    jail_count=jail_count+1
+    if(jail_count==3){
+      movement=sum(face)
+    }
+    return(jail_count)
+  }
+}
+
+dice <- function(){
+  double_count = 0
+  jail_count = 0
+  face = sample(1:6,2,replace=TRUE)
+  if(player_df[player+1, 2] = 11){
+    while(jail_count<3){
+    jail_out()
+    break
+    }
+  }
+  while(double_count<3){
+    check_double()
+  }
+}
+```
