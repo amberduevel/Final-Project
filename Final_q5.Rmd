@@ -51,3 +51,43 @@ dice <- function(){
   }
 }
 ```
+```{r Money}
+
+money_board<-function(){
+  if(player_df[player+1, 2] = 24 || player_df[player+1, 2] = 39){
+    cc_money()
+  }
+  if(player_df[player+1, 2] = 19 || player_df[player+1, 2] = 34 ){
+    chance_money()
+  }
+  if(player_df[player+1, 2] = 21){
+    free_parking()
+  }
+}
+
+cc_money<-function(){
+  money_amount = money_amount + cc_cards[,2]
+  if(cc_cards[,2]== negative){
+    bank_money = bank_money - cc_cards[,2]
+    return(bank_money)
+  }
+}
+
+chance_money<-function(){
+  money_amount = money_amount + chance_cards[,2]
+  if(chance_cards[,2]== negative){
+    bank_money = bank_money - chance_cards[,2]
+  }
+}
+
+free_parking<-function(){
+  if(parking_money==0){
+    money_amout=money_amout+100
+    return(money_amout)
+  }
+  parking_money = parking_money + bank_money
+  money_amount = money_amount + parking_money
+}
+
+
+```
