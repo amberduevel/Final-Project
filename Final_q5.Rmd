@@ -49,6 +49,7 @@ dice <- function(){
   }
   while(double_count<3){
     check_double()
+    break
   }
 }
 ```
