@@ -5,12 +5,12 @@ date: "4/26/2022"
 output: html_document
 ---
 
+
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
 ```{r dice}
-
 check_double<-function(face, double_count){
   if(face[1]==face[2]){
     movement=sum(face)
@@ -25,7 +25,6 @@ check_double<-function(face, double_count){
     movement=sum(face)
   }
 }
-
 jail_out<-function(face, jail_count){
   if(face[1]==face[2]){
     movement=sum(face)
@@ -37,7 +36,6 @@ jail_out<-function(face, jail_count){
     return(jail_count)
   }
 }
-
 dice <- function(){
   double_count = 0
   jail_count = 0
@@ -98,7 +96,6 @@ chance3 = c("Chance3", 0, 200, 82, "Cards")
 park = c("Park Place", 0, 200, 64, "Dark Blue")
 luxury = c("Luxury Tax", 0, 200, 46, "None")
 boardwalk = c("Boardwalk", 0, 200, 28, "Dark Blue")
-
 mono_board = rbind(mono_board, go, mediterranean, community1, baltic, income, reading, oriental, chance1, vermont, connecticut, just_visiting_jail, charles, electric, states, virginia, penn_railroad, james, community2, tennessee, new_york, parking, kentucky, chance2, indiana, illinois, b_o, atlantic, ventnor, water, marvin, jail, pacific, carolina, community3, penn_avenue, short, chance3, park, luxury, boardwalk)
 colnames(mono_board) = c('space_name', 'count', 'x_dimension', 'y_dimension', 'space_color')
 ```
@@ -119,7 +116,6 @@ player_df = rbind(player_df, player1, player2, player3, player4)
 colnames(player_df) = c("name", "position", "money")
 player_df = transform(player_df, position = as.numeric(position))
 num_players = nrow(player_df)
-
 #Columns: player, x-coordinate, y-coordinate
 mono_graph_data = data.frame()
 mono_graph_data = rbind(c(player_df[1, 1], mono_board[player_df[1, 2], 3], mono_board[player_df[1, 2], 4]), 
@@ -127,12 +123,10 @@ mono_graph_data = rbind(c(player_df[1, 1], mono_board[player_df[1, 2], 3], mono_
                         c(player_df[3, 1], mono_board[player_df[3, 2], 3], mono_board[player_df[3, 2], 4]), 
                         c(player_df[4, 1], mono_board[player_df[4, 2], 3], mono_board[player_df[4, 2], 4]))
 colnames(mono_graph_data) = c('player', 'x_coordinate', 'y_coordinate')
-
 rounds = 0
 player = 0
-
 move = function() {
-  roll = dice()
+  roll = dice_simple()
   space = player_df[player+1, 2] + roll
   if (space == 40) {
     space = 40
@@ -151,7 +145,6 @@ player_turn = function(player) {
   
   return(c(assign("mono_board", mono_board, .GlobalEnv), assign("player_df", player_df, .GlobalEnv), assign("mono_graph_data", mono_graph_data, .GlobalEnv)))
 }
-
 while (rounds < 100) {
   player_turn(player)
   player = (player+1)%%num_players
@@ -173,7 +166,6 @@ board_img = rasterGrob(readJPEG("monopolyboard.jpg"),
 ```{r plot}
 mono_graph_data = transform(mono_graph_data, x_coordinate = as.numeric(x_coordinate))
 mono_graph_data = transform(mono_graph_data, y_coordinate = as.numeric(y_coordinate))
-
 mono_graph = ggplot(mono_graph_data, group = "player") +
   annotation_custom(board_img) +
   theme(aspect.ratio = 1) +
@@ -181,16 +173,4 @@ mono_graph = ggplot(mono_graph_data, group = "player") +
   scale_y_continuous(limits = c(0, 200)) +
   geom_point(aes(x = x_coordinate, y = y_coordinate, color = player, size = 5))
 mono_graph
-```
-
-```{r count}
-#Wasn't sure if someone already made a graph for this question, but if not, my graph from question 2 should work for this question too
-count_plot = ggplot(mono_board, aes(x = space_name, y = count), group = "space_color") +
-  geom_bar(stat = "identity", aes(fill = space_color)) +
-  coord_flip() +
-  ggtitle("Count for Each Space") +
-  ylab("Count") +
-  xlab("Space Name") +
-  labs(fill = "Type of Space")
-count_plot
 ```
