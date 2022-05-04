@@ -68,7 +68,7 @@ money_board<-function(){
 
 cc_money<-function(){
   money_amount = money_amount + cc_cards[,2]
-  if(cc_cards[,2]== negative){
+  if(cc_cards[,2]<0){
     bank_money = bank_money - cc_cards[,2]
     return(bank_money)
   }
@@ -76,7 +76,7 @@ cc_money<-function(){
 
 chance_money<-function(){
   money_amount = money_amount + chance_cards[,2]
-  if(chance_cards[,2]== negative){
+  if(chance_cards[,2]<0){
     bank_money = bank_money - chance_cards[,2]
   }
 }
