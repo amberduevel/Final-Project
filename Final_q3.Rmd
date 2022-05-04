@@ -10,7 +10,8 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 ```{r dice}
-check_double<-function(){
+
+check_double<-function(face, double_count){
   if(face[1]==face[2]){
     movement=sum(face)
     dice()
@@ -25,7 +26,7 @@ check_double<-function(){
   }
 }
 
-jail_out<-function(){
+jail_out<-function(face, jail_count){
   if(face[1]==face[2]){
     movement=sum(face)
   }else{
@@ -41,14 +42,15 @@ dice <- function(){
   double_count = 0
   jail_count = 0
   face = sample(1:6,2,replace=TRUE)
-  if(player_df[player+1, 2] = 11){
+  if(player_df[player+1, 2] == 11){
     while(jail_count<3){
-    jail_out()
+    jail_out(face)
     break
     }
   }
   while(double_count<3){
-    check_double()
+    check_double(face, double_count)
+    break
   }
 }
 ```
