@@ -41,7 +41,7 @@ dice <- function(){
   double_count = 0
   jail_count = 0
   face = sample(1:6,2,replace=TRUE)
-  if(player_df[player+1, 2] = 11){
+  if(player_df[player+1, 2] == 11){
     while(jail_count<3){
     jail_out()
     break
