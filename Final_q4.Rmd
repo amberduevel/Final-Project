@@ -35,8 +35,15 @@ cc_cards_vec <- c("Advance to Go(collect $200)", "Bank error in your favor. Coll
 r <- sample(cc_cards_vec, size = 1, replace = FALSE)
 r
 
-
-
+jail_cc = function() {
+  space = player_df[player+1, 2]
+  if (r == "Go to jail. Go directly to jail, do not pass Go, do not collect $200") {
+    space = 11
+    }
+    else {
+      space = 1
+    }
+}
 
 chance_cards = data.frame()
 c1 = c("Advance to Boardwalk", 0, TRUE, "Boardwalk")
@@ -62,3 +69,13 @@ chance_cards_vec <- c("Advance to Boardwalk", "Advance to Go(collect $200)", "Ad
 
 r1 <- sample(chance_cards_vec, size = 1, replace = FALSE)
 r1
+
+jail_c = function() {
+  space = player_df[player+1, 2]
+  if (r1 == "Go to jail. Go directly to jail, do not pass Go, do not collect $200") {
+    space = 11
+    }
+    else {
+      space = 1
+    }
+}
