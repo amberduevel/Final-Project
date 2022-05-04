@@ -65,6 +65,9 @@ money_board<-function(){
   if(player_df[player+1, 2] = 21){
     free_parking()
   }
+  if(player_df[player+1, 2] < player_df[player, 2]){
+    money_amount = money_amount + 200
+    return(money_amount)
 }
 
 cc_money<-function(){
