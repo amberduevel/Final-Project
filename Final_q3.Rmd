@@ -126,7 +126,7 @@ colnames(mono_graph_data) = c('player', 'x_coordinate', 'y_coordinate')
 rounds = 0
 player = 0
 move = function() {
-  roll = dice_simple()
+  roll = dice()
   space = player_df[player+1, 2] + roll
   if (space == 40) {
     space = 40
