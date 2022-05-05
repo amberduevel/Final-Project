@@ -5,31 +5,31 @@ date: "4/26/2022"
 output: html_document
 ---
 
+
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
 ```{r dice}
 check_double<-function(face, double_count){
-  movement = 0
+  movement=0
   if(face[1]==face[2]){
-    movement=movement + sum(face)
-    cat("Movement: ", movement)
+    movement=movement+sum(face)
     double_count=double_count+1
+    dice()
     print("rolled doubles")
-    dice(movement)
       if(double_count==3){
         player_df[player+1, 2] = 11
         print("go to jail")
         return(assign("player_df",player_df,.GlobalEnv))
-      }
-      else {
-        movement=movement + sum(face)
+      }else{
+        movement=movement+sum(face)
       }
   }else{
-    movement=movement + sum(face)
+    movement=movement+sum(face)
   }
 }
+
 jail_out<-function(face, jail_count){
   if(face[1]==face[2]){
     movement=sum(face)
@@ -51,7 +51,7 @@ dice <- function(movement){
       break
     }
   }
-  if(double_count<= 3){
+  if(double_count<=3){
     check_double(face, double_count)
   }
 }
@@ -80,20 +80,22 @@ cc_cards <- rbind(cc_cards, cc1, cc2, cc3, cc4, cc5, cc6, cc7, cc8, cc9, cc10, c
 colnames(cc_cards) = c("Card Description")
 cc_cards_vec <- c("Advance to Go(collect $200)", "Bank error in your favor. Collect $200", "Doctor's fee. Pay $50", "From sale of stock you get $50", "Get out of jail free", "Go to jail. Go directly to jail, do not pass Go, do not collect $200", "Holiday fund matures. Receive $100", "Income tax refund. Collect $20", "It is your birthday. Collect $10 from every player", "Life insurance matures. Collect $100", "Pay hospital fees of $100", "Pay school fees of $50", "Receive $25 consultancy fee", "You are assessed for street repair. $40 per house. $115 per hotel", "You have won second prize in a beauty contest. Collect $10", "You inherit $100")
 
+
+
 jail_cc = function() {
   r <- sample(cc_cards_vec, size = 1, replace = FALSE)
-  print(r)
+  cat("CC...", r)
   space = player_df[player+1, 2]
   if (r == "Go to jail. Go directly to jail, do not pass Go, do not collect $200") {
     space = 11
-  }
-  else if (r == "Advance to Go(collect $200)") {
-    space = 1
-  }
-  else {
-    space = space
-  }
-  return(c(space, assign("player_df", player_df, .GlobalEnv)))
+    }
+    else if(r == "Advance to Go(collect $200)") {
+      space = 1
+    }else{
+      space=space
+    }
+  assign("player_df",player_df,.GlobalEnv)
+  return(space) 
 }
 chance_cards = data.frame()
 c1 = c("Advance to Boardwalk", 0, TRUE, "Boardwalk")
@@ -116,9 +118,11 @@ chance_cards = rbind(chance_cards, c1, c2, c3, c4, c5, c6, c7, c8, c9, c10, c11,
 colnames(chance_cards) = c("Card Description")
 chance_cards_vec <- c("Advance to Boardwalk", "Advance to Go(collect $200)", "Advance to Illinois Avenue. If you pass Go, collect $200", "Advance to St. Charles Place. If you pass Go, collect $200", "Advance to the nearest Railroad. If unowned, you may buy it from the Bank. If owned, pay owner twice the rental to which they are otherwise entitled", "Advance to the nearest Railroad. If unowned, you may buy it from the Bank. If owned, pay owner twice the rental to which they are otherwise entitled", "Advance token to the nearest Utility. If unowned, you may buy it from the Bank. If owned, throw dice and pay owner a total ten times amount thrown.", "Bank pays you dividend of $50", "Get out of jail free", "Go back 3 spaces", "Go to jail. Go directly to jail, do not pass Go, do not collect $200", "Make general repairs on all your property. For each house pay $25. For each hotel pay $100", "Speeding fine $15", "Take a trip to Reading Railroad. If you pass Go, collect $200", "You have been elected Chairman of the Board. Pay each player $50", "Your building loan matures. Collect $150")
 
+
+
 jail_c = function() {
   r1 <- sample(chance_cards_vec, size = 1, replace = FALSE)
-  print(r1)
+  cat("C...", r1)
   space = player_df[player+1, 2]
   if (r1 == "Go to jail. Go directly to jail, do not pass Go, do not collect $200") {
     space = 11
@@ -162,13 +166,21 @@ jail_c = function() {
     }
     else if (r1 == "Go back 3 spaces") {
       space <<- space - 3
+      if(space<1){
+        space=space+40
+      }
     }
     else {
-      space = space
+      space=space
     }
-  return (c(space, assign("player_df", player_df, .GlobalEnv)))
+  assign("player_df",player_df,.GlobalEnv)
+  return(space)
+  
 }
 ```
+
+
+
 
 ```{r board}
 mono_board = data.frame()
@@ -223,6 +235,7 @@ mono_board = transform(mono_board, y_dimension = as.numeric(y_dimension))
 mono_board = transform(mono_board, count = as.numeric(count))
 ```
 
+
 ```{r turn}
 player_df = data.frame()
 player1 = c("player1", 1, 1500)
@@ -242,7 +255,6 @@ mono_graph_data = rbind(c(player_df[1, 1], mono_board[player_df[1, 2], 3], mono_
 colnames(mono_graph_data) = c('player', 'x_coordinate', 'y_coordinate')
 rounds = 0
 player = 0
-
 move = function() {
   roll = dice()
   space = player_df[player+1, 2] + roll
@@ -252,35 +264,30 @@ move = function() {
   else {
     space = space%%40
   }
-  
   if(space==3 || space==18 || space==34){
-    print("cc")
-    space = jail_cc()
+    space=jail_cc()
+  }else if(space==8 || space==23 || space==37){
+    space=jail_c()
   }
-  else if(space==8 || space==23 || space==37){
-    print("c")
-    space = jail_c()
-  }
-  
   return(space)
 }
 player_turn = function(player) {
   s = move()
-  cat(player_df[player+1, 1], s)
   mono_board[s, 2] = as.numeric(mono_board[s, 2] + 1)
   player_df[player+1, 2] = s
-  #cat(player_df[player+1, 1], )
   
   mono_graph_data = rbind(mono_graph_data, c(player_df[player+1, 1], mono_board[player_df[player+1, 2], 3], mono_board[player_df[player+1, 2], 4]))
   
   return(c(assign("mono_board", mono_board, .GlobalEnv), assign("player_df", player_df, .GlobalEnv), assign("mono_graph_data", mono_graph_data, .GlobalEnv)))
 }
-while (rounds < 20) {
+while (rounds < 10) {
   player_turn(player)
   player = (player+1)%%num_players
   rounds = rounds + 1
 }
 ```
+
+
 
 ```{r image}
 library(grid)
@@ -306,6 +313,7 @@ mono_graph
 ```
 
 ```{r count}
+#Again, not sure if someone already made a graph showing the counts, but if not, we can use mine from question 2
 count_plot = ggplot(mono_board, aes(x = space_name, y = count), group = "space_color") +
   geom_bar(stat = "identity", aes(fill = space_color)) +
   coord_flip() +
@@ -314,3 +322,4 @@ count_plot = ggplot(mono_board, aes(x = space_name, y = count), group = "space_c
   xlab("Space Name") +
   labs(fill = "Type of Space")
 count_plot
+```
