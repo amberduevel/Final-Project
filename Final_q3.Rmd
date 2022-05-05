@@ -11,20 +11,23 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ```{r dice}
 check_double<-function(face, double_count){
+  movement = 0
   if(face[1]==face[2]){
-    movement=sum(face)
-    dice()
-    movement=sum(face)
-    print("rolled doubles")
+    movement=movement + sum(face)
+    cat("Movement: ", movement)
     double_count=double_count+1
+    print("rolled doubles")
+    dice(movement)
       if(double_count==3){
         player_df[player+1, 2] = 11
         print("go to jail")
         return(assign("player_df",player_df,.GlobalEnv))
       }
-    return(double_count)
+      else {
+        movement=movement + sum(face)
+      }
   }else{
-    movement=sum(face)
+    movement=movement + sum(face)
   }
 }
 jail_out<-function(face, jail_count){
@@ -38,10 +41,9 @@ jail_out<-function(face, jail_count){
     return(jail_count)
   }
 }
-dice <- function(){
+dice <- function(movement){
   double_count = 0
   jail_count = 0
-  #Changed it from '=' to '=='
   face = sample(1:6,2,replace=TRUE)
   if(player_df[player+1, 2] == 11){
     while(jail_count<3){
@@ -49,7 +51,7 @@ dice <- function(){
       break
     }
   }
-  if(double_count<3){
+  if(double_count<= 3){
     check_double(face, double_count)
   }
 }
@@ -182,7 +184,6 @@ mono_graph
 ```
 
 ```{r count}
-#Wasn't sure if someone already made a graph for this question, but if not, my graph from question 2 should work for this question too
 count_plot = ggplot(mono_board, aes(x = space_name, y = count), group = "space_color") +
   geom_bar(stat = "identity", aes(fill = space_color)) +
   coord_flip() +
@@ -191,4 +192,3 @@ count_plot = ggplot(mono_board, aes(x = space_name, y = count), group = "space_c
   xlab("Space Name") +
   labs(fill = "Type of Space")
 count_plot
-```
