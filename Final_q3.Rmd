@@ -11,23 +11,20 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ```{r dice}
 check_double<-function(face, double_count){
-  movement = 0
   if(face[1]==face[2]){
-    movement=movement + sum(face)
-    cat("Movement: ", movement)
     double_count=double_count+1
     print("rolled doubles")
-    dice(movement)
-      if(double_count==3){
-        player_df[player+1, 2] = 11
-        print("go to jail")
-        return(assign("player_df",player_df,.GlobalEnv))
-      }
-      else {
-        movement=movement + sum(face)
-      }
+    if(double_count==3){
+      player_df[player+1, 2] = 11
+      print("go to jail")
+      return(assign("player_df",player_df,.GlobalEnv))
+    }
+    else {
+      check_double(face, double_count)
+    }
   }else{
-    movement=movement + sum(face)
+    #return the sum of the faces and go back to dice function
+    return(sum(face))
   }
 }
 jail_out<-function(face, jail_count){
@@ -41,19 +38,22 @@ jail_out<-function(face, jail_count){
     return(jail_count)
   }
 }
-dice <- function(movement){
+#add more movement things to this function instead of check_double to let it be more organized.
+dice <- function(){
   double_count = 0
   jail_count = 0
   face = sample(1:6,2,replace=TRUE)
+  
   if(player_df[player+1, 2] == 11){
     while(jail_count<3){
       jail_out(face, jail_count)
       break
     }
   }
-  if(double_count<= 3){
-    check_double(face, double_count)
-  }
+  
+  sum_face = check_double(face, double_count)
+  
+  #cat("Movement: ", movement)
 }
 ```
 
@@ -153,7 +153,7 @@ player_turn = function(player) {
   return(c(assign("mono_board", mono_board, .GlobalEnv), assign("player_df", player_df, .GlobalEnv), assign("mono_graph_data", mono_graph_data, .GlobalEnv)))
 }
 
-while (rounds < 20) {
+while (rounds < 40) {
   player_turn(player)
   player = (player+1)%%num_players
   rounds = rounds + 1
@@ -192,3 +192,4 @@ count_plot = ggplot(mono_board, aes(x = space_name, y = count), group = "space_c
   xlab("Space Name") +
   labs(fill = "Type of Space")
 count_plot
+```
