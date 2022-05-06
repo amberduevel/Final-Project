@@ -157,8 +157,11 @@ jail_c = function(space) {
   player_df[player+1, 2] = space
   mono_graph_data = rbind(mono_graph_data, c(player_df[player+1, 1], mono_board[player_df[player+1, 2], 3], mono_board[player_df[player+1, 2], 4]))
   
+  #selecting a random chance card
   r1 <- sample(chance_cards_vec, size = 1, replace = FALSE)
   cat("C...", r1)
+  
+  #checking what the card is and moving the player to the position the card says
   space = player_df[player+1, 2]
   if (r1 == "Go to jail. Go directly to jail, do not pass Go, do not collect $200") {
     space = 11
@@ -261,7 +264,9 @@ chance3 = c("Chance3", 0, 200, 82, "Cards")
 park = c("Park Place", 0, 200, 64, "Dark Blue")
 luxury = c("Luxury Tax", 0, 200, 46, "None")
 boardwalk = c("Boardwalk", 0, 200, 28, "Dark Blue")
+
 mono_board = rbind(mono_board, go, mediterranean, community1, baltic, income, reading, oriental, chance1, vermont, connecticut, just_visiting_jail, charles, electric, states, virginia, penn_railroad, james, community2, tennessee, new_york, parking, kentucky, chance2, indiana, illinois, b_o, atlantic, ventnor, water, marvin, jail, pacific, carolina, community3, penn_avenue, short, chance3, park, luxury, boardwalk)
+
 colnames(mono_board) = c('space_name', 'count', 'x_dimension', 'y_dimension', 'space_color')
 
 #using transform() to have the x-dimension, y-dimension, and count columns be numeric instead of character
@@ -338,6 +343,7 @@ library(tidyverse)
 library(ggplot2)
 library(gganimate)
 Sys.setenv("VROOM_CONNECTION_SIZE" = 131072 * 2)
+
 #storing the monopoly board image, monopolyboard.jpg, in board_img
 board_img = rasterGrob(readJPEG("monopolyboard.jpg"), 
                        width = unit(1, "npc"), height = unit(1, "npc"))
