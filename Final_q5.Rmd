@@ -10,6 +10,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 ```{r dice}
+#checking to see if you roll a double
 check_double<-function(face, double_count){
   if(face[1]==face[2]){
     double_count=double_count+1
@@ -43,11 +44,14 @@ check_double<-function(face, double_count){
     return(sum(face))
   }
 }
+
+#call this function if the player is in jail
 jail_out<-function(face, jail_count){
   if(face[1]==face[2]){
     movement=sum(face)
   }else{
     jail_count=jail_count+1
+    #leave jail if player has already tried to get out of jail three times and was unsuccessful 
     if(jail_count==3){
       movement=sum(face)
     }
@@ -74,6 +78,7 @@ dice <- function(){
 
 ```{r}
 library(dplyr)
+#creating the community chess cards
 cc_cards = data.frame()
 cc1 = c("Advance to Go(collect $200)", 200, TRUE, "Go")
 cc2 = c("Bank error in your favor. Collect $200", 200, FALSE, NA)
@@ -96,6 +101,7 @@ colnames(cc_cards) = c("card_description", "money_gain", "true/false", "move")
 cc_cards = transform(cc_cards, money_gain = as.numeric(money_gain))
 cc_cards_vec <- c("Advance to Go(collect $200)", "Bank error in your favor. Collect $200", "Doctor's fee. Pay $50", "From sale of stock you get $50", "Get out of jail free", "Go to jail. Go directly to jail, do not pass Go, do not collect $200", "Holiday fund matures. Receive $100", "Income tax refund. Collect $20", "It is your birthday. Collect $10 from every player", "Life insurance matures. Collect $100", "Pay hospital fees of $100", "Pay school fees of $50", "Receive $25 consultancy fee", "You are assessed for street repair. $40 per house. $115 per hotel", "You have won second prize in a beauty contest. Collect $10", "You inherit $100")
 
+#selecting a community chess card
 jail_cc = function(space) {
   mono_board[space, 2] = as.numeric(mono_board[space, 2] + 1)
   player_df[player+1, 2] = space
@@ -120,6 +126,7 @@ jail_cc = function(space) {
   return(c(space, r_pos))
 }
 
+#creating the chance cards
 chance_cards = data.frame()
 c1 = c("Advance to Boardwalk", 0, TRUE, "Boardwalk")
 c2 = c("Advance to Go(collect $200)", 200, TRUE, "Go")
@@ -142,6 +149,7 @@ colnames(chance_cards) = c("card_description", "money_gain", "true/false", "move
 chance_cards = transform(chance_cards, money_gain = as.numeric(money_gain))
 chance_cards_vec <- c("Advance to Boardwalk", "Advance to Go(collect $200)", "Advance to Illinois Avenue. If you pass Go, collect $200", "Advance to St. Charles Place. If you pass Go, collect $200", "Advance to the nearest Railroad. If unowned, you may buy it from the Bank. If owned, pay owner twice the rental to which they are otherwise entitled", "Advance to the nearest Railroad. If unowned, you may buy it from the Bank. If owned, pay owner twice the rental to which they are otherwise entitled", "Advance token to the nearest Utility. If unowned, you may buy it from the Bank. If owned, throw dice and pay owner a total ten times amount thrown.", "Bank pays you dividend of $50", "Get out of jail free", "Go back 3 spaces", "Go to jail. Go directly to jail, do not pass Go, do not collect $200", "Make general repairs on all your property. For each house pay $25. For each hotel pay $100", "Speeding fine $15", "Take a trip to Reading Railroad. If you pass Go, collect $200", "You have been elected Chairman of the Board. Pay each player $50", "Your building loan matures. Collect $150")
 
+#selecting a chance card
 jail_c = function(space) {
   mono_board[space, 2] = as.numeric(mono_board[space, 2] + 1)
   player_df[player+1, 2] = space
@@ -211,17 +219,24 @@ jail_c = function(space) {
 ```
 
 ```{r Money}
+#establishing to money amounts to use in the function
 bank_money = 0
+parking_money = 0
+
+#adding or subtracting the money to the players total amount
 money_board<-function(){
+  #checking if player lands on free parking
   if(player_df[player+1, 2] == 21){
     free_parking()
     bank_money = 0
   }
+  #if player is at GO add 200 to money amount
   if(player_df[player+1, 2] == 1){
     player_df[player+1,3]=player_df[player+1,3]+200
   }
 }
 
+#adding money to player amount based on the community chess cards
 cc_money<-function(space_pos){
   r_pos = space_pos[2]
   player_df[player+1,3] = player_df[player+1,3] + cc_cards[r_pos, 2]
@@ -233,6 +248,8 @@ cc_money<-function(space_pos){
     assign("player_df", player_df, .GlobalEnv)
   }
 }
+
+#adding money to players amount based on the chance cards
 chance_money<-function(space_pos){
   r_pos = space_pos[2]
   player_df[player+1,3] = player_df[player+1,3] + chance_cards[r_pos, 2]
@@ -244,6 +261,8 @@ chance_money<-function(space_pos){
     assign("player_df", player_df, .GlobalEnv)
   }
 }
+
+#adding money amount to free parking so there is total when someone lands on that spot
 free_parking<-function(){
   if(parking_money == 0){
     player_df[player+1,3]=player_df[player+1,3] + 100
@@ -309,6 +328,7 @@ mono_board = transform(mono_board, count = as.numeric(count))
 ```
 
 ```{r turn}
+#creating a data frame with all the players variables
 player_df = data.frame()
 player1 = c("player1", 1, 1500)
 player2 = c("player2", 1, 1500)
@@ -328,6 +348,8 @@ mono_graph_data = rbind(c(player_df[1, 1], mono_board[player_df[1, 2], 3], mono_
 colnames(mono_graph_data) = c('player', 'x_coordinate', 'y_coordinate')
 rounds = 0
 player = 0
+
+#moving the players to different positions based on the roll
 move = function() {
   roll = dice()
   space = player_df[player+1, 2] + roll
@@ -350,6 +372,8 @@ move = function() {
   assign("mono_graph_data", mono_graph_data, .GlobalEnv)
   return(space)
 }
+
+#calling player turn so each player can move based on their roll
 player_turn = function(player) {
   s = move()
   mono_board[s, 2] = as.numeric(mono_board[s, 2] + 1)
@@ -359,6 +383,8 @@ player_turn = function(player) {
   
   return(c(assign("mono_board", mono_board, .GlobalEnv), assign("player_df", player_df, .GlobalEnv), assign("mono_graph_data", mono_graph_data, .GlobalEnv)))
 }
+
+#the amount of rounds we want to run
 while (rounds < 100) {
   player_turn(player)
   cat(" Player: ", player_df[player+1,1], " Position: ", mono_board[player_df[player+1, 2], 1], "\n")
@@ -373,12 +399,15 @@ library(jpeg)
 library(tidyverse)
 library(ggplot2)
 library(gganimate)
+
+#creating the monopoly board to display on the board
 Sys.setenv("VROOM_CONNECTION_SIZE" = 131072 * 2)
 board_img = rasterGrob(readJPEG("monopolyboard.jpg"), 
                        width = unit(1, "npc"), height = unit(1, "npc"))
 ```
 
 ```{r plot}
+#graphing the all the positions that each player lands on
 mono_graph_data = transform(mono_graph_data, x_coordinate = as.numeric(x_coordinate))
 mono_graph_data = transform(mono_graph_data, y_coordinate = as.numeric(y_coordinate))
 mono_graph = ggplot(mono_graph_data, group = "player") +
@@ -391,6 +420,7 @@ mono_graph
 ```
 
 ```{r count}
+#creating a bar graph with the count of each space getting landed on
 count_plot = ggplot(mono_board, aes(x = space_name, y = count), group = "space_color") +
   geom_bar(stat = "identity", aes(fill = space_color)) +
   coord_flip() +
@@ -400,3 +430,5 @@ count_plot = ggplot(mono_board, aes(x = space_name, y = count), group = "space_c
   labs(fill = "Type of Space")
 count_plot
 ```
+
+With our program we don't have anything dealing with properties. Due to this players usually don't become bankrupt and that is when a normal game would. It is a rare occasion when a player loses money so it's hard for a player to become bankrupt. This is why we only ran our program for one hundred rounds. We created a function to collect all the money taken away from each player and added it to bank amount. This would be given to a player if they landed on free parking. The more rounds we run the more likely the bank amount would increase significantly. This would help player's money amount to also increase significantly too. 
