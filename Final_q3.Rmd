@@ -2,7 +2,9 @@
 title: "Final_q3"
 author: "Amber Duevel"
 date: "4/26/2022"
-output: html_document
+output:
+  word_document: default
+  html_document: default
 ---
 
 ```{r setup, include=FALSE}
@@ -50,7 +52,6 @@ check_double<-function(face, double_count){
     return(sum(face))
   }
 }
-
 #calling jail out when a player is in jail and is trying to get out of jail by rolling doubles
 jail_out<-function(face, jail_count){
   if(face[1]==face[2]){
@@ -64,7 +65,6 @@ jail_out<-function(face, jail_count){
     return(jail_count)
   }
 }
-
 #calling dice with each turn for each player
 dice <- function(){
   double_count = 0
@@ -152,7 +152,6 @@ player_df = rbind(player_df, player1, player2, player3, player4)
 colnames(player_df) = c("name", "position", "money")
 player_df = transform(player_df, position = as.numeric(position))
 num_players = nrow(player_df)
-
 #mono_graph_data is a dataframe which stores the history of each players moves around the board
 mono_graph_data = data.frame()
 mono_graph_data = rbind(c(player_df[1, 1], mono_board[player_df[1, 2], 3], mono_board[player_df[1, 2], 4]), 
@@ -160,10 +159,8 @@ mono_graph_data = rbind(c(player_df[1, 1], mono_board[player_df[1, 2], 3], mono_
                         c(player_df[3, 1], mono_board[player_df[3, 2], 3], mono_board[player_df[3, 2], 4]), 
                         c(player_df[4, 1], mono_board[player_df[4, 2], 3], mono_board[player_df[4, 2], 4]))
 colnames(mono_graph_data) = c('player', 'x_coordinate', 'y_coordinate')
-
 rounds = 0
 player = 0
-
 #moving the players to new positions based on the number they rolled
 move = function() {
   roll = dice()
@@ -187,9 +184,8 @@ player_turn = function(player) {
   
   return(c(assign("mono_board", mono_board, .GlobalEnv), assign("player_df", player_df, .GlobalEnv), assign("mono_graph_data", mono_graph_data, .GlobalEnv)))
 }
-
 #number of rounds that the game is played
-while (rounds < 40) {
+while (rounds < 100) {
   player_turn(player)
   cat(" Player: ", player_df[player+1,1], " Position: ", player_df[player+1,2])
   player = (player+1)%%num_players
@@ -233,4 +229,5 @@ count_plot = ggplot(mono_board, aes(x = space_name, y = count), group = "space_c
   labs(fill = "Type of Space")
 count_plot
 ```
-The outcome of this question is very similar to the first question due to the face that we aren't adding cards or the jail function. In this question we are taking into account the double rule. If a player roles a double they can roll again but if a player roles three doubles in a row they are sent to jail. This could impact the space jail. Rolling doubles three times in a row is very unlikely but possible. So we suspect on jail spot to have a higher count than other spaces because it's the only position a player can move to. The other spots are still equally likely to occur.
+The outcome of this question is very similar to the first question due to the face that we aren't adding cards or the jail function. In this question we are taking into account the double rule. If a player roles a double they can roll again but if a player roles three doubles in a row they are sent to jail. This could impact the space jail. Rolling doubles three times in a row is very unlikely but possible. So we suspect on jail spot to have a higher count than other spaces because it's the only position a player can move to. The other spots are still equally likely to occur. We ran our program one hundred rounds because there wasn't a natural stop to the game due to the fact we aren't dealing with money. After one hundred rounds we had North Carolina Avenue being landed on the most frequently. If we ran the program more we would get a more evenly split count for each space.
+
