@@ -2,7 +2,9 @@
 title: "Final_q2"
 author: "Amber Duevel"
 date: "4/26/2022"
-output: html_document
+output:
+  word_document: default
+  html_document: default
 ---
 
 ```{r setup, include=FALSE}
@@ -20,7 +22,6 @@ dice_simple<- function(verbose= FALSE){
 ```{r board}
 #mono_board is a dataframe which holds 40 space objects, with Go being the first space
 mono_board = data.frame()
-
 #the 40 space objects as a vector
 go = c("Go", 0, 200, 0, "None")
 mediterranean = c("Mediterranean Avenue", 0, 172, 0, "Purple")
@@ -62,13 +63,10 @@ chance3 = c("Chance3", 0, 200, 82, "Cards")
 park = c("Park Place", 0, 200, 64, "Dark Blue")
 luxury = c("Luxury Tax", 0, 200, 46, "None")
 boardwalk = c("Boardwalk", 0, 200, 28, "Dark Blue")
-
 #using rbind to add the 40 space objects to mono_board
 mono_board = rbind(mono_board, go, mediterranean, community1, baltic, income, reading, oriental, chance1, vermont, connecticut, just_visiting_jail, charles, electric, states, virginia, penn_railroad, james, community2, tennessee, new_york, parking, kentucky, chance2, indiana, illinois, b_o, atlantic, ventnor, water, marvin, jail, pacific, carolina, community3, penn_avenue, short, chance3, park, luxury, boardwalk)
-
 #the column names for mono_board are space_name which holds characters of the name of the space, count which is numeric and holds the number of times the space was landed on in one "game", x-dimension which is numeric and holds the x-coordinate on the graph, y-coordinate which is numeric and holds the y-coordinate on the graph, and space_color which is a character and holds the color of the space or the group that the space belongs best to. 
 colnames(mono_board) = c('space_name', 'count', 'x_dimension', 'y_dimension', 'space_color')
-
 #using transform() to have the x-dimension, y-dimension, and count columns be numeric instead of character
 mono_board = transform(mono_board, x_dimension = as.numeric(x_dimension))
 mono_board = transform(mono_board, y_dimension = as.numeric(y_dimension))
@@ -78,23 +76,18 @@ mono_board = transform(mono_board, count = as.numeric(count))
 ```{r turn}
 #player_df dataframe which is storing position and money data for each player
 player_df = data.frame()
-
 #four players were created with position = 1 and starting money is 1500
 player1 = c("player1", 1, 1500)
 player2 = c("player2", 1, 1500)
 player3 = c("player3", 1, 1500)
 player4 = c("player4", 1, 1500)
-
 #using rbind function to add the four player objects to the player_df dataframe
 player_df = rbind(player_df, player1, player2, player3, player4)
-
 #the columns in the player_df dataframe are name, position, and money
 colnames(player_df) = c("name", "position", "money")
-
 #used transform() to have the position be numeric instead of a character
 player_df = transform(player_df, position = as.numeric(position))
 num_players = nrow(player_df)
-
 #mono_graph_data is a dataframe which stores the history of each players moves around the board
 mono_graph_data = data.frame()
 mono_graph_data = rbind(c(player_df[1, 1], mono_board[player_df[1, 2], 3], mono_board[player_df[1, 2], 4]), 
@@ -103,11 +96,9 @@ mono_graph_data = rbind(c(player_df[1, 1], mono_board[player_df[1, 2], 3], mono_
                         c(player_df[4, 1], mono_board[player_df[4, 2], 3], mono_board[player_df[4, 2], 4]))
 #the mono_graph_data dataframe stores the player, x-coordinate on the board plot, and y-coordinate on the board plot, which are each a column
 colnames(mono_graph_data) = c('player', 'x_coordinate', 'y_coordinate')
-
 #initially set rounds and current player to 0
 rounds = 0
 player = 0
-
 #move function which stores roll from dice_simple output and add roll to the current position in player_df and stores in space, and space is returned
 move = function() {
   roll = dice_simple()
@@ -121,7 +112,6 @@ move = function() {
   }
   return(space)
 }
-
 #player_turn takes in the current player, calls the move function and stores the current space in s, then increases the count on that space by 1 and updates player_df to be the new current space
 player_turn = function(player) {
   s = move()
@@ -134,9 +124,8 @@ player_turn = function(player) {
   #need to return the assign mono_board, player_df, and mono_graph_data so that the new dataframes can be stored and called from the global environment
   return(c(assign("mono_board", mono_board, .GlobalEnv), assign("player_df", player_df, .GlobalEnv), assign("mono_graph_data", mono_graph_data, .GlobalEnv)))
 }
-
 #running 50 rounds of the game
-while (rounds < 50) {
+while (rounds < 100) {
   player_turn(player)
   player = (player+1)%%num_players
   rounds = rounds + 1
@@ -150,7 +139,6 @@ library(tidyverse)
 library(ggplot2)
 library(gganimate)
 Sys.setenv("VROOM_CONNECTION_SIZE" = 131072 * 2)
-
 #storing the monopoly board image, monopolyboard.jpg, in board_img
 board_img = rasterGrob(readJPEG("monopolyboard.jpg"), 
                        width = unit(1, "npc"), height = unit(1, "npc"))
@@ -158,6 +146,7 @@ board_img = rasterGrob(readJPEG("monopolyboard.jpg"),
 
 ```{r plot}
 #using the transform() function to change the x and y-coordinate columns to numeric in mono_graph_data
+
 mono_graph_data = transform(mono_graph_data, x_coordinate = as.numeric(x_coordinate))
 mono_graph_data = transform(mono_graph_data, y_coordinate = as.numeric(y_coordinate))
 
@@ -170,7 +159,6 @@ mono_graph = ggplot(mono_graph_data, group = "player") +
   geom_point(aes(x = x_coordinate, y = y_coordinate, color = player, size = 5))
 mono_graph
 ```
-
 ```{r count}
 #count_plot is a bar graph with the space name as the y-axis and count for each space as the x-axis. Colors are grouped based on the type of space and color associated with each space on the board, if any
 count_plot = ggplot(mono_board, aes(x = space_name, y = count), group = "space_color") +
@@ -182,5 +170,4 @@ count_plot = ggplot(mono_board, aes(x = space_name, y = count), group = "space_c
   labs(fill = "Type of Space")
 count_plot
 ```
-
-Each spot has an equal probability of being landed on. Due to the fact that we are not checking for doubles, using the cards or having a jail function, all spots have an equal chance. This part of monopoly is simple because it's just relying on the chances of a dice. It's all dictated on the probability of a number on the dice being rolled. A dice has an even probability of each number being landed on so each space should be somewhat equal by the end of the game.
+Each spot has an equal probability of being landed on. Due to the fact that we are not checking for doubles, using the cards or having a jail function, all spots have an equal chance. This part of monopoly is simple because it's just relying on the chances of a dice. It's all dictated on the probability of a number on the dice being rolled. A dice has an even probability of each number being landed on so each space should be somewhat equal by the end of the game. We ran our program for one hundred rounds because there isn't a natural stop to the game when you don't deal with money or property. When we did this we got income tax to be landed on the most frequently. If we ran the program for more rounds we would find that each space was landed on an equal amount
