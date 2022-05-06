@@ -232,3 +232,4 @@ count_plot = ggplot(mono_board, aes(x = space_name, y = count), group = "space_c
   labs(fill = "Type of Space")
 count_plot
 ```
+The outcome of this question is very similar to the first question due to the face that we aren't adding cards or the jail function. In this question we are taking into account the double rule. If a player roles a double they can roll again but if a player roles three doubles in a row they are sent to jail. This could impact the space jail. Rolling doubles three times in a row is very unlikely but possible. So we suspect on jail spot to have a higher count than other spaces because it's the only position a player can move to. The other spots are still equally likely to occur.
