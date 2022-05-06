@@ -13,16 +13,19 @@ GO-
 1. Every player starts at the GO position
 2. Everytime a player passses GO they collect $200
 
-Chnce and Community Chest-
+On a Players Turn-
+1. The player will roll two six-sided dice and move the sum of the two dice
+2. If the player rolls doubles, they get to roll again
+
+Chance and Community Chest-
 1. If a player lands on either of these spaces they draw a card and then discard it
 2. The "Get Out of Jail Free" card is kept until a player uses it
 
-Jail-
+Jail- 
 Go to Jail when...
-  1. Player lands on a space marked "Go to Jail"
-  2. Player draws a card marked "Go to Jail"
-  3. Player throws doubles three times in one turn
-
+  - Player lands on a space marked "Go to Jail"
+  - Player draws a card marked "Go to Jail"
+  - Player throws doubles three times in one turn
 1. Player can't collect $200 when passing GO if they are sent to jail
 2. Player's turn ends when sent to jail
 
@@ -31,5 +34,13 @@ Player gets out of Jail when...
   2. Player uses a "Get out of Jail Free" card if they have one
   3. Paying a fine of $50 before rolling the dice for their turn
   4. If player hasn't rolled doubles by their third turn, they have to pay the $50 fine and move forward the amount rolled
+
+Additional Spaces- 
+1. Free parking: when a player lands on free parking, they receive all of the money that the bank has accumulated since the previous player landed on free parking. If the bank hasn't accumulated any money, the player receives $100.
+2. Income and Luxury Tax: player has to pay the bank $200 and $75, respectively
+
+End of Game-
+1. Game ends when a player runs out of money
+2. The player with the most money at the end of the game wins
 
 
