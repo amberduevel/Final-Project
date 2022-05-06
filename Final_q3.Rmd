@@ -10,12 +10,17 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 ```{r dice}
+#checking to see if the dice roll is a double
 check_double<-function(face, double_count){
+  #does each separate roll match the other
   if(face[1]==face[2]){
+    #increasing the count by 1 if it is a double
     double_count=double_count+1
     print("rolled doubles")
     print(sum(face))
+    #if you roll three doubles in a row, the player is sent to jail
     if(double_count==3){
+      #position of jail
       player_df[player+1, 2] = 11
       print("go to jail")
       assign("player_df",player_df,.GlobalEnv)
@@ -46,11 +51,14 @@ check_double<-function(face, double_count){
     return(sum(face))
   }
 }
+
+#calling jail out when a player is in jail and is trying to get out of jail by rolling doubles
 jail_out<-function(face, jail_count){
   if(face[1]==face[2]){
     movement=sum(face)
   }else{
     jail_count=jail_count+1
+    #by the third round, if you don't roll doubles, player still leaves jail
     if(jail_count==3){
       movement=sum(face)
     }
