@@ -16,17 +16,15 @@ check_double<-function(face, double_count){
   if(face[1]==face[2]){
     #increasing the count by 1 if it is a double
     double_count=double_count+1
-    print("rolled doubles")
-    print(sum(face))
     #if you roll three doubles in a row, the player is sent to jail
     if(double_count==3){
-      #position of jail
+      #11 is position of jail
       player_df[player+1, 2] = 11
-      print("go to jail")
       assign("player_df",player_df,.GlobalEnv)
       return(sum(face))
     }
     else {
+      #space is the new current space, and updating player_df with the new position, mono_board count increases by 1, and mono_graph_data adds a row with the new data
       space = player_df[player+1, 2] + sum(face)
       if (space == 40) {
         space = 40
@@ -40,6 +38,7 @@ check_double<-function(face, double_count){
   
       mono_graph_data = rbind(mono_graph_data, c(player_df[player+1, 1], mono_board[player_df[player+1, 2], 3], mono_board[player_df[player+1, 2], 4]))
       
+      #rolls the dice and gets new face value and calls check_doubles, which is a recursive call
       face = sample(1:6,2,replace=TRUE)
       check_double(face, double_count)
     }
@@ -87,7 +86,7 @@ dice <- function(){
 ```
 
 ```{r board}
-#establishing the monoploy board with positions
+#establishing the monopoly board with positions
 mono_board = data.frame()
 # All of the spaces on the board
 go = c("Go", 0, 200, 0, "None")
@@ -153,7 +152,8 @@ player_df = rbind(player_df, player1, player2, player3, player4)
 colnames(player_df) = c("name", "position", "money")
 player_df = transform(player_df, position = as.numeric(position))
 num_players = nrow(player_df)
-#Columns: player, x-coordinate, y-coordinate
+
+#mono_graph_data is a dataframe which stores the history of each players moves around the board
 mono_graph_data = data.frame()
 mono_graph_data = rbind(c(player_df[1, 1], mono_board[player_df[1, 2], 3], mono_board[player_df[1, 2], 4]), 
                         c(player_df[2, 1], mono_board[player_df[2, 2], 3], mono_board[player_df[2, 2], 4]), 
@@ -177,6 +177,7 @@ move = function() {
   }
   return(space)
 }
+#uses the returned space value and assigns it to s
 player_turn = function(player) {
   s = move()
   mono_board[s, 2] = as.numeric(mono_board[s, 2] + 1)
