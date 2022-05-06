@@ -65,19 +65,21 @@ jail_out<-function(face, jail_count){
     return(jail_count)
   }
 }
-#add more movement things to this function instead of check_double to let it be more organized.
+
+#calling dice with each turn for each player
 dice <- function(){
   double_count = 0
   jail_count = 0
+  #rolling the dice
   face = sample(1:6,2,replace=TRUE)
-  
+  #if the person is in jail we called the jail_out function
   if(player_df[player+1, 2] == 11){
     while(jail_count<3){
       jail_out(face, jail_count)
       break
     }
   }
-  
+  #returning the sum of the roll so we can add it to the position
   sum_face = check_double(face, double_count)
   print(sum_face)
   return(sum_face)
@@ -85,6 +87,7 @@ dice <- function(){
 ```
 
 ```{r board}
+#establishing the monoploy board with positions
 mono_board = data.frame()
 # All of the spaces on the board
 go = c("Go", 0, 200, 0, "None")
@@ -132,12 +135,15 @@ colnames(mono_board) = c('space_name', 'count', 'x_dimension', 'y_dimension', 's
 ```
 
 ```{r}
+#making it so we can display the board as a graph
 mono_board = transform(mono_board, x_dimension = as.numeric(x_dimension))
 mono_board = transform(mono_board, y_dimension = as.numeric(y_dimension))
 mono_board = transform(mono_board, count = as.numeric(count))
 ```
 
 ```{r turn}
+#establishing the players and putting them into a data frame
+#each player holds what number player, position, and how much money they have
 player_df = data.frame()
 player1 = c("player1", 1, 1500)
 player2 = c("player2", 1, 1500)
@@ -158,8 +164,10 @@ colnames(mono_graph_data) = c('player', 'x_coordinate', 'y_coordinate')
 rounds = 0
 player = 0
 
+#moving the players to new positions based on the number they rolled
 move = function() {
   roll = dice()
+  #adding their roll to their current position
   space = player_df[player+1, 2] + roll
   if (space == 40) {
     space = 40
@@ -179,6 +187,7 @@ player_turn = function(player) {
   return(c(assign("mono_board", mono_board, .GlobalEnv), assign("player_df", player_df, .GlobalEnv), assign("mono_graph_data", mono_graph_data, .GlobalEnv)))
 }
 
+#number of rounds that the game is played
 while (rounds < 40) {
   player_turn(player)
   player = (player+1)%%num_players
@@ -187,6 +196,7 @@ while (rounds < 40) {
 ```
 
 ```{r image}
+#putting the image of the monopoly board on the graph
 library(grid)
 library(jpeg)
 library(tidyverse)
@@ -198,6 +208,7 @@ board_img = rasterGrob(readJPEG("monopolyboard.jpg"),
 ```
 
 ```{r plot}
+#plotting all the positions that the players are at on the graph
 mono_graph_data = transform(mono_graph_data, x_coordinate = as.numeric(x_coordinate))
 mono_graph_data = transform(mono_graph_data, y_coordinate = as.numeric(y_coordinate))
 mono_graph = ggplot(mono_graph_data, group = "player") +
@@ -210,6 +221,7 @@ mono_graph
 ```
 
 ```{r count}
+#creating a bar graph of the amount of times each spot on the board is landed on
 count_plot = ggplot(mono_board, aes(x = space_name, y = count), group = "space_color") +
   geom_bar(stat = "identity", aes(fill = space_color)) +
   coord_flip() +
