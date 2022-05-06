@@ -13,11 +13,8 @@ knitr::opts_chunk$set(echo = TRUE)
 check_double<-function(face, double_count){
   if(face[1]==face[2]){
     double_count=double_count+1
-    print("rolled doubles")
-    print(sum(face))
     if(double_count==3){
       player_df[player+1, 2] = 11
-      print("go to jail")
       assign("player_df",player_df,.GlobalEnv)
       return(sum(face))
     }
@@ -71,7 +68,6 @@ dice <- function(){
   }
   
   sum_face = check_double(face, double_count)
-  print(sum_face)
   return(sum_face)
 }
 ```
@@ -102,9 +98,7 @@ cc_cards_vec <- c("Advance to Go(collect $200)", "Bank error in your favor. Coll
 
 jail_cc = function(space) {
   mono_board[space, 2] = as.numeric(mono_board[space, 2] + 1)
-  cat("jail_cc", "before space update", player_df[player+1, 3], "\n")
   player_df[player+1, 2] = space
-  cat("jail_cc", "after space update", player_df[player+1, 3], "\n")
   mono_graph_data = rbind(mono_graph_data, c(player_df[player+1, 1], mono_board[player_df[player+1, 2], 3], mono_board[player_df[player+1, 2], 4]))
   assign("player_df",player_df,.GlobalEnv)
   
@@ -120,13 +114,12 @@ jail_cc = function(space) {
       space=space
     }
   r_pos = match(r, cc_cards[,1])
-  cat("jail_cc", "before assign", player_df[player+1, 3], "\n")
   assign("player_df",player_df,.GlobalEnv)
   assign("mono_board", mono_board, .GlobalEnv)
   assign("mono_graph_data", mono_graph_data, .GlobalEnv)
-  cat("jail_cc", "after assign", player_df[player+1, 3], "\n")
   return(c(space, r_pos))
 }
+
 chance_cards = data.frame()
 c1 = c("Advance to Boardwalk", 0, TRUE, "Boardwalk")
 c2 = c("Advance to Go(collect $200)", 200, TRUE, "Go")
@@ -148,13 +141,14 @@ chance_cards = rbind(chance_cards, c1, c2, c3, c4, c5, c6, c7, c8, c9, c10, c11,
 colnames(chance_cards) = c("card_description", "money_gain", "true/false", "move")
 chance_cards = transform(chance_cards, money_gain = as.numeric(money_gain))
 chance_cards_vec <- c("Advance to Boardwalk", "Advance to Go(collect $200)", "Advance to Illinois Avenue. If you pass Go, collect $200", "Advance to St. Charles Place. If you pass Go, collect $200", "Advance to the nearest Railroad. If unowned, you may buy it from the Bank. If owned, pay owner twice the rental to which they are otherwise entitled", "Advance to the nearest Railroad. If unowned, you may buy it from the Bank. If owned, pay owner twice the rental to which they are otherwise entitled", "Advance token to the nearest Utility. If unowned, you may buy it from the Bank. If owned, throw dice and pay owner a total ten times amount thrown.", "Bank pays you dividend of $50", "Get out of jail free", "Go back 3 spaces", "Go to jail. Go directly to jail, do not pass Go, do not collect $200", "Make general repairs on all your property. For each house pay $25. For each hotel pay $100", "Speeding fine $15", "Take a trip to Reading Railroad. If you pass Go, collect $200", "You have been elected Chairman of the Board. Pay each player $50", "Your building loan matures. Collect $150")
+
 jail_c = function(space) {
   mono_board[space, 2] = as.numeric(mono_board[space, 2] + 1)
   player_df[player+1, 2] = space
   mono_graph_data = rbind(mono_graph_data, c(player_df[player+1, 1], mono_board[player_df[player+1, 2], 3], mono_board[player_df[player+1, 2], 4]))
   
   r1 <- sample(chance_cards_vec, size = 1, replace = FALSE)
-  cat("C...", r1)
+  print(r1)
   space = player_df[player+1, 2]
   if (r1 == "Go to jail. Go directly to jail, do not pass Go, do not collect $200") {
     space = 11
@@ -209,11 +203,9 @@ jail_c = function(space) {
       space=space
     }
   r_pos = match(r1, chance_cards[,1])
-  cat("jail_c", "before assign", player_df[player+1, 3], "\n")
   assign("player_df",player_df,.GlobalEnv)
   assign("mono_board", mono_board, .GlobalEnv)
   assign("mono_graph_data", mono_graph_data, .GlobalEnv)
-  cat("jail_c", "after assign", player_df[player+1, 3], "\n")
   return(c(space, r_pos))
 }
 ```
@@ -229,21 +221,16 @@ money_board<-function(){
     player_df[player+1,3]=player_df[player+1,3]+200
   }
 }
+
 cc_money<-function(space_pos){
   r_pos = space_pos[2]
   player_df[player+1,3] = player_df[player+1,3] + cc_cards[r_pos, 2]
   if(cc_cards[r_pos, 2] < 0){
     bank_money = bank_money - cc_cards[r_pos, 2]
-    cat("cc_money", "before assign", player_df[player+1, 3], "\n")
     assign("player_df", player_df, .GlobalEnv)
-    cat("cc_money", "after assign", player_df[player+1, 3], "\n")
-    #return(player_df)
   }
   else {
-    cat("cc_money", "before assign", player_df[player+1, 3], "\n")
     assign("player_df", player_df, .GlobalEnv)
-    cat("cc_money", "after assign", player_df[player+1, 3], "\n")
-    #return(player_df)
   }
 }
 chance_money<-function(space_pos){
@@ -251,17 +238,10 @@ chance_money<-function(space_pos){
   player_df[player+1,3] = player_df[player+1,3] + chance_cards[r_pos, 2]
   if(chance_cards[r_pos, 2] < 0){
     bank_money = bank_money - chance_cards[r_pos, 2]
-    cat("chance_money", "before assign", player_df[player+1, 3], "\n")
     assign("player_df", player_df, .GlobalEnv)
-    cat("chance_money", "after assign", player_df[player+1, 3], "\n")
-    #return(player_df)
   }
   else {
-    cat("chance_money", "before assign", player_df[player+1, 3], "\n")
     assign("player_df", player_df, .GlobalEnv)
-    cat("chance_money", "after assign", player_df[player+1, 3], "\n")
-    assign("player_df", player_df, .GlobalEnv)
-    #return(player_df)
   }
 }
 free_parking<-function(){
@@ -364,16 +344,14 @@ move = function() {
     space_pos=jail_c(space)
     chance_money(space_pos)
   }
-  cat("move", "before assign", player_df[player+1, 3], "\n")
+  money_board()
   assign("mono_board", mono_board, .GlobalEnv)
   assign("player_df", player_df, .GlobalEnv)
   assign("mono_graph_data", mono_graph_data, .GlobalEnv)
-  cat("move", "after assign", player_df[player+1, 3], "\n")
   return(space)
 }
 player_turn = function(player) {
   s = move()
-  #money_board()
   mono_board[s, 2] = as.numeric(mono_board[s, 2] + 1)
   player_df[player+1, 2] = s
   
@@ -381,8 +359,9 @@ player_turn = function(player) {
   
   return(c(assign("mono_board", mono_board, .GlobalEnv), assign("player_df", player_df, .GlobalEnv), assign("mono_graph_data", mono_graph_data, .GlobalEnv)))
 }
-while (rounds < 20) {
+while (rounds < 100) {
   player_turn(player)
+  cat(" Player: ", player_df[player+1,1], " Position: ", mono_board[player_df[player+1, 2], 1], "\n")
   player = (player+1)%%num_players
   rounds = rounds + 1
 }
