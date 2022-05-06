@@ -171,4 +171,4 @@ mono_graph = ggplot(mono_graph_data, group = "player") +
 mono_graph
 ```
 
-Each spot has an equal probability of being landed on. Due to the fact that we are not checking for doubles, using the cards or having a jail function, all spots have an equal chance. This part of monopoly is simple because it's just relying on the chances of a dice. It's all dictated on the probability of a number on the dice being rolled. 
+Each spot has an equal probability of being landed on. Due to the fact that we are not checking for doubles, using the cards or having a jail function, all spots have an equal chance. This part of monopoly is simple because it's just relying on the chances of a dice. It's all dictated on the probability of a number on the dice being rolled. A dice has an even probability of each number being landed on so each space should be somewhat equal by the end of the game.
