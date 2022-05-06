@@ -171,4 +171,16 @@ mono_graph = ggplot(mono_graph_data, group = "player") +
 mono_graph
 ```
 
+```{r count}
+#count_plot is a bar graph with the space name as the y-axis and count for each space as the x-axis. Colors are grouped based on the type of space and color associated with each space on the board, if any
+count_plot = ggplot(mono_board, aes(x = space_name, y = count), group = "space_color") +
+  geom_bar(stat = "identity", aes(fill = space_color)) +
+  coord_flip() +
+  ggtitle("Count for Each Space") +
+  ylab("Count") +
+  xlab("Space Name") +
+  labs(fill = "Type of Space")
+count_plot
+```
+
 Each spot has an equal probability of being landed on. Due to the fact that we are not checking for doubles, using the cards or having a jail function, all spots have an equal chance. This part of monopoly is simple because it's just relying on the chances of a dice. It's all dictated on the probability of a number on the dice being rolled. A dice has an even probability of each number being landed on so each space should be somewhat equal by the end of the game.
