@@ -15,15 +15,12 @@ knitr::opts_chunk$set(echo = TRUE)
 check_double<-function(face, double_count){
   if(face[1]==face[2]){
     double_count=double_count+1
-    print("rolled doubles")
-    print(sum(face))
     if(double_count==3){
       player_df[player+1, 2] = 11
-      print("go to jail")
       assign("player_df",player_df,.GlobalEnv)
       return(sum(face))
     }
-# Otherwise assigning the new space to the old space plus the roll of the dice
+    # Otherwise assigning the new space to the old space plus the roll of the dice
     else {
       space = player_df[player+1, 2] + sum(face)
       if (space == 40) {
@@ -32,7 +29,7 @@ check_double<-function(face, double_count){
       else {
         space = space%%40
       }
-# Conditions for drawing community chest and chance cards
+      # Conditions for drawing community chest and chance cards
       if(space==3 || space==18 || space==34){
         space=jail_cc()
       }else if(space==8 || space==23 || space==37){
@@ -81,7 +78,6 @@ dice <- function(){
   }
   
   sum_face = check_double(face, double_count)
-  print(sum_face)
   return(sum_face)
 }
 ```
@@ -221,10 +217,8 @@ jail_c = function(space) {
 }
 ```
 
-
-
-
 ```{r board}
+#mono_board is a dataframe which holds 40 space objects, with Go being the first space
 mono_board = data.frame()
 # All of the spaces on the board
 go = c("Go", 0, 200, 0, "None")
@@ -269,17 +263,17 @@ luxury = c("Luxury Tax", 0, 200, 46, "None")
 boardwalk = c("Boardwalk", 0, 200, 28, "Dark Blue")
 mono_board = rbind(mono_board, go, mediterranean, community1, baltic, income, reading, oriental, chance1, vermont, connecticut, just_visiting_jail, charles, electric, states, virginia, penn_railroad, james, community2, tennessee, new_york, parking, kentucky, chance2, indiana, illinois, b_o, atlantic, ventnor, water, marvin, jail, pacific, carolina, community3, penn_avenue, short, chance3, park, luxury, boardwalk)
 colnames(mono_board) = c('space_name', 'count', 'x_dimension', 'y_dimension', 'space_color')
-```
 
-```{r}
+#using transform() to have the x-dimension, y-dimension, and count columns be numeric instead of character
 mono_board = transform(mono_board, x_dimension = as.numeric(x_dimension))
 mono_board = transform(mono_board, y_dimension = as.numeric(y_dimension))
 mono_board = transform(mono_board, count = as.numeric(count))
 ```
 
-
 ```{r turn}
+#player_df dataframe which is storing position and money data for each player
 player_df = data.frame()
+#four players were created with position = 1 and starting money is 1500
 player1 = c("player1", 1, 1500)
 player2 = c("player2", 1, 1500)
 player3 = c("player3", 1, 1500)
@@ -288,15 +282,19 @@ player_df = rbind(player_df, player1, player2, player3, player4)
 colnames(player_df) = c("name", "position", "money")
 player_df = transform(player_df, position = as.numeric(position))
 num_players = nrow(player_df)
-#Columns: player, x-coordinate, y-coordinate
+
+#mono_graph_data is a dataframe which stores the history of each players moves around the board
 mono_graph_data = data.frame()
 mono_graph_data = rbind(c(player_df[1, 1], mono_board[player_df[1, 2], 3], mono_board[player_df[1, 2], 4]), 
                         c(player_df[2, 1], mono_board[player_df[2, 2], 3], mono_board[player_df[2, 2], 4]), 
                         c(player_df[3, 1], mono_board[player_df[3, 2], 3], mono_board[player_df[3, 2], 4]), 
                         c(player_df[4, 1], mono_board[player_df[4, 2], 3], mono_board[player_df[4, 2], 4]))
 colnames(mono_graph_data) = c('player', 'x_coordinate', 'y_coordinate')
+
 rounds = 0
 player = 0
+
+#move function which stores roll from dice_simple output and add roll to the current position in player_df and stores in space, and space is returned
 move = function() {
   roll = dice()
   space = player_df[player+1, 2] + roll
@@ -313,6 +311,8 @@ move = function() {
   }
   return(space)
 }
+
+#player_turn takes in the current player, calls the move function and stores the current space in s, then increases the count on that space by 1 and updates player_df to be the new current space
 player_turn = function(player) {
   s = move()
   mono_board[s, 2] = as.numeric(mono_board[s, 2] + 1)
@@ -322,14 +322,14 @@ player_turn = function(player) {
   
   return(c(assign("mono_board", mono_board, .GlobalEnv), assign("player_df", player_df, .GlobalEnv), assign("mono_graph_data", mono_graph_data, .GlobalEnv)))
 }
+
+#running 50 rounds of the game
 while (rounds < 50) {
   player_turn(player)
   player = (player+1)%%num_players
   rounds = rounds + 1
 }
 ```
-
-
 
 ```{r image}
 library(grid)
@@ -338,13 +338,17 @@ library(tidyverse)
 library(ggplot2)
 library(gganimate)
 Sys.setenv("VROOM_CONNECTION_SIZE" = 131072 * 2)
+#storing the monopoly board image, monopolyboard.jpg, in board_img
 board_img = rasterGrob(readJPEG("monopolyboard.jpg"), 
                        width = unit(1, "npc"), height = unit(1, "npc"))
 ```
 
 ```{r plot}
+#using the transform() function to change the x and y-coordinate columns to numeric in mono_graph_data
 mono_graph_data = transform(mono_graph_data, x_coordinate = as.numeric(x_coordinate))
 mono_graph_data = transform(mono_graph_data, y_coordinate = as.numeric(y_coordinate))
+
+#mono_graph is a scatterplot with the monopoly board as the background and the points are the plots where the players have been. There are four different colors, which represent each player
 mono_graph = ggplot(mono_graph_data, group = "player") +
   annotation_custom(board_img) +
   theme(aspect.ratio = 1) +
@@ -355,7 +359,7 @@ mono_graph
 ```
 
 ```{r count}
-#Again, not sure if someone already made a graph showing the counts, but if not, we can use mine from question 2
+#count_plot is a bar graph with the space name as the y-axis and count for each space as the x-axis. Colors are grouped based on the type of space and color associated with each space on the board, if any
 count_plot = ggplot(mono_board, aes(x = space_name, y = count), group = "space_color") +
   geom_bar(stat = "identity", aes(fill = space_color)) +
   coord_flip() +
