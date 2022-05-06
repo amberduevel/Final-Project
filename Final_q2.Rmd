@@ -10,6 +10,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 ```{r dice}
+#rolling the dice and adding it's sum to the players current position
 dice_simple<- function(verbose= FALSE){
   face<- sample(1:6, 2, replace=TRUE)
   movement=sum(face)
