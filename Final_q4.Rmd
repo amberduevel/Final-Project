@@ -11,6 +11,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 ```{r dice}
+# Checking for rolled doubles and sending the player to jail if the faces are equal
 check_double<-function(face, double_count){
   if(face[1]==face[2]){
     double_count=double_count+1
@@ -22,6 +23,7 @@ check_double<-function(face, double_count){
       assign("player_df",player_df,.GlobalEnv)
       return(sum(face))
     }
+# Otherwise assigning the new space to the old space plus the roll of the dice
     else {
       space = player_df[player+1, 2] + sum(face)
       if (space == 40) {
@@ -30,6 +32,7 @@ check_double<-function(face, double_count){
       else {
         space = space%%40
       }
+# Conditions for drawing community chest and chance cards
       if(space==3 || space==18 || space==34){
         space=jail_cc()
       }else if(space==8 || space==23 || space==37){
@@ -52,6 +55,7 @@ check_double<-function(face, double_count){
     return(sum(face))
   }
 }
+# Counting how many times the player has been in jail
 jail_out<-function(face, jail_count){
   if(face[1]==face[2]){
     movement=sum(face)
@@ -84,6 +88,7 @@ dice <- function(){
 
 ```{r}
 library(dplyr)
+# The deck of community chest cards
 cc_cards = data.frame()
 cc1 = c("Advance to Go(collect $200)", 200, TRUE, "Go")
 cc2 = c("Bank error in your favor. Collect $200", 200, FALSE, NA)
@@ -103,7 +108,10 @@ cc15 = c("You have won second prize in a beauty contest. Collect $10", 10, FALSE
 cc16 = c("You inherit $100", 100, FALSE, NA)
 cc_cards <- rbind(cc_cards, cc1, cc2, cc3, cc4, cc5, cc6, cc7, cc8, cc9, cc10, cc11, cc12, cc13, cc14, cc15, cc16)
 colnames(cc_cards) = c("Card Description")
+
 cc_cards_vec <- c("Advance to Go(collect $200)", "Bank error in your favor. Collect $200", "Doctor's fee. Pay $50", "From sale of stock you get $50", "Get out of jail free", "Go to jail. Go directly to jail, do not pass Go, do not collect $200", "Holiday fund matures. Receive $100", "Income tax refund. Collect $20", "It is your birthday. Collect $10 from every player", "Life insurance matures. Collect $100", "Pay hospital fees of $100", "Pay school fees of $50", "Receive $25 consultancy fee", "You are assessed for street repair. $40 per house. $115 per hotel", "You have won second prize in a beauty contest. Collect $10", "You inherit $100")
+
+# Checking if player movement is needed based on the cc card draw
 jail_cc = function(space) {
   mono_board[space, 2] = as.numeric(mono_board[space, 2] + 1)
   player_df[player+1, 2] = space
@@ -123,6 +131,8 @@ jail_cc = function(space) {
   assign("player_df",player_df,.GlobalEnv)
   return(space) 
 }
+
+# The deck of chance cards
 chance_cards = data.frame()
 c1 = c("Advance to Boardwalk", 0, TRUE, "Boardwalk")
 c2 = c("Advance to Go(collect $200)", 200, TRUE, "Go")
@@ -142,7 +152,10 @@ c15 = c("You have been elected Chairman of the Board. Pay each player $50", -50,
 c16 = c("Your building loan matures. Collect $150", 150, FALSE, NA)
 chance_cards = rbind(chance_cards, c1, c2, c3, c4, c5, c6, c7, c8, c9, c10, c11, c12, c13, c14, c15, c16)
 colnames(chance_cards) = c("Card Description")
+
 chance_cards_vec <- c("Advance to Boardwalk", "Advance to Go(collect $200)", "Advance to Illinois Avenue. If you pass Go, collect $200", "Advance to St. Charles Place. If you pass Go, collect $200", "Advance to the nearest Railroad. If unowned, you may buy it from the Bank. If owned, pay owner twice the rental to which they are otherwise entitled", "Advance to the nearest Railroad. If unowned, you may buy it from the Bank. If owned, pay owner twice the rental to which they are otherwise entitled", "Advance token to the nearest Utility. If unowned, you may buy it from the Bank. If owned, throw dice and pay owner a total ten times amount thrown.", "Bank pays you dividend of $50", "Get out of jail free", "Go back 3 spaces", "Go to jail. Go directly to jail, do not pass Go, do not collect $200", "Make general repairs on all your property. For each house pay $25. For each hotel pay $100", "Speeding fine $15", "Take a trip to Reading Railroad. If you pass Go, collect $200", "You have been elected Chairman of the Board. Pay each player $50", "Your building loan matures. Collect $150")
+
+# Checking if player movement is needed based on the c card draw
 jail_c = function(space) {
   mono_board[space, 2] = as.numeric(mono_board[space, 2] + 1)
   player_df[player+1, 2] = space
