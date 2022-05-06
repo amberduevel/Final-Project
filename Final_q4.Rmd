@@ -31,9 +31,9 @@ check_double<-function(face, double_count){
       }
       # Conditions for drawing community chest and chance cards
       if(space==3 || space==18 || space==34){
-        space=jail_cc()
+        space=jail_cc(space)
       }else if(space==8 || space==23 || space==37){
-        space=jail_c()
+        space=jail_c(space)
       }
     
       mono_board[space, 2] = as.numeric(mono_board[space, 2] + 1)
