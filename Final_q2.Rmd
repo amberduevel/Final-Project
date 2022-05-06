@@ -124,9 +124,10 @@ player_turn = function(player) {
   #need to return the assign mono_board, player_df, and mono_graph_data so that the new dataframes can be stored and called from the global environment
   return(c(assign("mono_board", mono_board, .GlobalEnv), assign("player_df", player_df, .GlobalEnv), assign("mono_graph_data", mono_graph_data, .GlobalEnv)))
 }
-#running 50 rounds of the game
+#running 100 rounds of the game
 while (rounds < 100) {
   player_turn(player)
+  cat(" Player: ", player_df[player+1,1], " Position: ", mono_board[player_df[player+1, 2], 1], "\n")
   player = (player+1)%%num_players
   rounds = rounds + 1
 }
@@ -146,10 +147,8 @@ board_img = rasterGrob(readJPEG("monopolyboard.jpg"),
 
 ```{r plot}
 #using the transform() function to change the x and y-coordinate columns to numeric in mono_graph_data
-
 mono_graph_data = transform(mono_graph_data, x_coordinate = as.numeric(x_coordinate))
 mono_graph_data = transform(mono_graph_data, y_coordinate = as.numeric(y_coordinate))
-
 #mono_graph is a scatterplot with the monopoly board as the background and the points are the plots where the players have been. There are four different colors, which represent each player
 mono_graph = ggplot(mono_graph_data, group = "player") +
   annotation_custom(board_img) +
@@ -159,6 +158,7 @@ mono_graph = ggplot(mono_graph_data, group = "player") +
   geom_point(aes(x = x_coordinate, y = y_coordinate, color = player, size = 5))
 mono_graph
 ```
+
 ```{r count}
 #count_plot is a bar graph with the space name as the y-axis and count for each space as the x-axis. Colors are grouped based on the type of space and color associated with each space on the board, if any
 count_plot = ggplot(mono_board, aes(x = space_name, y = count), group = "space_color") +
@@ -170,4 +170,5 @@ count_plot = ggplot(mono_board, aes(x = space_name, y = count), group = "space_c
   labs(fill = "Type of Space")
 count_plot
 ```
+
 Each spot has an equal probability of being landed on. Due to the fact that we are not checking for doubles, using the cards or having a jail function, all spots have an equal chance. This part of monopoly is simple because it's just relying on the chances of a dice. It's all dictated on the probability of a number on the dice being rolled. A dice has an even probability of each number being landed on so each space should be somewhat equal by the end of the game. We ran our program for one hundred rounds because there isn't a natural stop to the game when you don't deal with money or property. When we did this we got income tax to be landed on the most frequently. If we ran the program for more rounds we would find that each space was landed on an equal amount
