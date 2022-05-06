@@ -191,6 +191,7 @@ player_turn = function(player) {
 #number of rounds that the game is played
 while (rounds < 40) {
   player_turn(player)
+  cat(" Player: ", player_df[player+1,1], " Position: ", player_df[player+1,2])
   player = (player+1)%%num_players
   rounds = rounds + 1
 }
