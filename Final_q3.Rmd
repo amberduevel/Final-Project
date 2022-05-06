@@ -37,12 +37,12 @@ check_double<-function(face, double_count){
       
       face = sample(1:6,2,replace=TRUE)
       check_double(face, double_count)
-      assign("mono_board", mono_board, .GlobalEnv)
-      assign("player_df", player_df, .GlobalEnv)
-      assign("mono_graph_data", mono_graph_data, .GlobalEnv)
     }
   }else{
     #return the sum of the faces and go back to dice function
+    assign("mono_board", mono_board, .GlobalEnv)
+    assign("player_df", player_df, .GlobalEnv)
+    assign("mono_graph_data", mono_graph_data, .GlobalEnv)
     return(sum(face))
   }
 }
@@ -71,8 +71,8 @@ dice <- function(){
   }
   
   sum_face = check_double(face, double_count)
-  
-  #cat("Movement: ", movement)
+  print(sum_face)
+  return(sum_face)
 }
 ```
 
@@ -152,7 +152,6 @@ player = 0
 
 move = function() {
   roll = dice()
-  print(roll)
   space = player_df[player+1, 2] + roll
   if (space == 40) {
     space = 40
